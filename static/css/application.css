@@ -1,2 +1,5 @@
 body {
   padding-top: 70px; }
+
+#searchForm fieldset > .row {
+  margin-bottom: 1em; }

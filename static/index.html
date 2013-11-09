@@ -52,7 +52,7 @@
     <div class="container">
       <div id="error"></div>
 
-      <form action="" role="form" class="form-inline">
+      <form action="" role="form" id="searchForm" class="form-inline">
         <fieldset>
           <legend>What's for dinner?</legend>
           <div class="row">
@@ -61,62 +61,56 @@
               <input id="search" class="form-control input-lg" type="search" placeholder="e.g. Thai Green Curry, Bolognese&hellip;" />
             </div>
             <div class="form-group col-md-2 col-xs-12">
-              <label for="servings" class="sr-only">Number of Servings</label>
-              <select name="servings" id="servings" class="form-control input-lg">
-                <option selected># servings</option>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-              </select>
+              <button type="button" data-toggle="collapse" data-target="#servingSelector" class="btn btn-primary btn-lg">Just You?</button>
             </div>
           </div><!-- /.row -->
           <div class="row">
-             <div class="btn-group col-xs-12" data-toggle="buttons">
-              <label class="btn btn-primary">
-                <input type="radio" name="servings" value="1">Just You?
-              </label>
-              <label class="btn btn-primary">
-                <input type="radio" name="servings" value="2">2 People
-              </label>
-              <label class="btn btn-primary">
-                <input type="radio" name="servings" value="3">3 People
-              </label>
-              <label class="btn btn-primary">
-                <input type="radio" name="servings" value="4">4 People
-              </label>
-              <label class="btn btn-primary">
-                <input type="radio" name="servings" value="5">5 People
-              </label>
-              <label class="btn btn-primary">
-                <input type="radio" name="servings" value=">5">Partaaay?
-              </label>
-            </div> 
-          </div><!-- /.row -->
+            <div id="servingSelector" class="collapse col-md-12">
+              <div class="btn-group" data-toggle="buttons">
+                <label class="btn btn-primary">
+                  <input type="radio" name="servings" value="1">Just You?
+                </label>
+                <label class="btn btn-primary">
+                  <input type="radio" name="servings" value="2">2 People
+                </label>
+                <label class="btn btn-primary">
+                  <input type="radio" name="servings" value="3">3 People
+                </label>
+                <label class="btn btn-primary">
+                  <input type="radio" name="servings" value="4">4 People
+                </label>
+                <label class="btn btn-primary">
+                  <input type="radio" name="servings" value="5">5 People
+                </label>
+                <label class="btn btn-primary">
+                  <input type="radio" name="servings" value=">5">Partaaay?
+                </label>
+              </div> 
+            </div>
+          </div>
         </fieldset>
       </form>
 
       <div id="searchResults">
 
 
-      <script type="text/template" id="errorTemplate">
-        <span style="background-color: red; color: white;">Error: <%=statusCode%></span>
-      </script>
+        <script type="text/template" id="errorTemplate">
+          <span style="background-color: red; color: white;">Error: <%=statusCode%></span>
+        </script>
 
-      <script type="text/template" id="searchResultTemplate">
-        <div>
-          Name: <%= name %>
-          <img src="<%= url %>" />
-        </div>
-      </script>
-    </div> <!-- /container -->
+        <script type="text/template" id="searchResultTemplate">
+          <div>
+            Name: <%= name %>
+            <img src="<%= url %>" />
+          </div>
+        </script>
+      </div> <!-- /container -->
 
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
-  </body>
-</html>
+      <!-- Bootstrap core JavaScript
+      ================================================== -->
+      <!-- Placed at the end of the document so the pages load faster -->
+      <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+      <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
+    </body>
+  </html>
