@@ -32,6 +32,12 @@ hideKeyboard = ->
   document.activeElement.blur()
   $("input").blur()
 
+$('#searchForm').on('change', 'input[name=servings]', ->
+  selected = $.trim($(this).parent('label').text())
+  $('button[data-target=#servingSelector]').text(selected)
+  $('#servingSelector').collapse('hide')
+)
+
 $ ->
   window.userId = userId = 1
   pasta = new Ingredient
