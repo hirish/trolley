@@ -28,8 +28,39 @@ EatListRecipe = Backbone.Model.extend
     ingredients: new Ingredients
     user: null
 
+hideKeyboard = ->
+  document.activeElement.blur()
+  $("input").blur()
+
 $ ->
   window.userId = userId = 1
+  pasta = new Ingredient
+    id: 1
+    name: "Spaghetti"
+    amount: 150
+    isVolume: false
+  bologneseIngredients = new Ingredients [pasta]
+
+  bolognese = new Recipe
+      id: 1
+      name: "Spaghetti Bolognese"
+      imageURL: "http://upload.wikimedia.org/wikipedia/commons/e/e5/Heston_Blumenthal's_Perfect_Spaghetti_Bolognese.jpg"
+      ingredients: bologneseIngredients
+      servingSize: 2
+      isStarred: false
+      rating: 5
+
+  myBolognese = new EatListRecipe
+    baseRecipe: bolognese
+    ingredients: bolognese.get('ingredients')
+  anotherBolognese = new EatListRecipe
+    baseRecipe: bolognese
+    ingredients: bolognese.get('ingredients')
+  finalBolognese = new EatListRecipe
+    baseRecipe: bolognese
+    ingredients: bolognese.get('ingredients')
+
+  eatlist = [myBolognese, anotherBolognese, finalBolognese]
 
   searchBox = $('#search')
   searchResultsBox = $('#searchResults')
@@ -50,7 +81,7 @@ $ ->
   renderSearchResult = (result) ->
     _.template searchResultTemplate,
       name: result.get('name')
-      url: result.get('url')
+      imageURL: result.get('imageURL')
 
   searchResultHandler = (jsonResults) ->
     # Turn JSON recipes into recipe objects
@@ -66,12 +97,10 @@ $ ->
 
   createRecipeFromJSON = (jsonRecipe) ->
     # Filler
-    new Recipe
-      name: "Spaghetti Bolognese"
-      url: "http://upload.wikimedia.org/wikipedia/commons/e/e5/Heston_Blumenthal's_Perfect_Spaghetti_Bolognese.jpg"
+    return bolognese
 
   errorHandler = (reqObj) ->
     renderedTemplate = _.template errorTemplate, statusCode: 404
     errorBox.html renderedTemplate
 
-  searchBox.keyup throttledSearch
+  searchBox.change throttledSearch

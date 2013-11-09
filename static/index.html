@@ -21,8 +21,6 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js"></script> 
 
-    <!-- Application JS -->
-    <script src="/js/trolley.js"></script>
   </head>
 
   <body>
@@ -52,7 +50,7 @@
     <div class="container">
       <div id="error"></div>
 
-      <form action="" role="form" id="searchForm" class="form-inline">
+      <form action="javascript:hideKeyboard()" action="" role="form" id="searchForm" class="form-inline">
         <fieldset>
           <legend>What's for dinner?</legend>
           <div class="row">
@@ -91,26 +89,28 @@
         </fieldset>
       </form>
 
-      <div id="searchResults">
+      <div id="searchResults"></div>
+
+      <script type="text/template" id="errorTemplate">
+        <span style="background-color: red; color: white;">Error: <%=statusCode%></span>
+      </script>
+
+      <script type="text/template" id="searchResultTemplate">
+        <div>
+          Name: <%= name %>
+          <img src="<%= imageURL %>" />
+        </div>
+      </script>
+    </div> <!-- /container -->
 
 
-        <script type="text/template" id="errorTemplate">
-          <span style="background-color: red; color: white;">Error: <%=statusCode%></span>
-        </script>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
 
-        <script type="text/template" id="searchResultTemplate">
-          <div>
-            Name: <%= name %>
-            <img src="<%= url %>" />
-          </div>
-        </script>
-      </div> <!-- /container -->
-
-
-      <!-- Bootstrap core JavaScript
-      ================================================== -->
-      <!-- Placed at the end of the document so the pages load faster -->
-      <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
-      <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
-    </body>
-  </html>
+    <!-- Application JS -->
+    <script src="/js/trolley.js"></script>
+  </body>
+</html>
