@@ -1,47 +1,98 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Trolley</title>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
 
-    <link rel="stylesheet" href="/css/application.css" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Trolley &mdash; Shop Simple</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+
+    <!-- Application CSS -->
+    <link rel="stylesheet" href="/css/application.css">
+
+    <!-- Backbone -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js"></script> 
 
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap-theme.min.css" />
-    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <!-- Application JS -->
+    <script src="/js/trolley.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Trolley</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Eat Now</a></li>
+            <li><a href="#about">History</a></li>
+            <li><a href="#contact">Starred</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+      <div id="error"></div>
+
+      <form action="" role="form" class="form-inline">
+        <fieldset>
+          <legend>What's for dinner?</legend>
+          <div class="form-group">
+            <label for="search" class="sr-only">Desired Dish Name</label>
+            <input id="search" class="form-control input-lg" type="search" placeholder="e.g. Thai Green Curry, Bolognese&hellip;" />
+          </div>
+          <div class="form-group">
+            <label for="servings" class="sr-only">Number of Servings</label>
+            <select name="servings" id="servings" class="form-control input-lg">
+              <option selected># servings</option>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+            </select>
+          </div>
+        </fieldset>
+      </form>
+
+      <div id="searchResults">
+
+
+      <script type="text/template" id="errorTemplate">
+        <span style="background-color: red; color: white;">Error: <%=statusCode%></span>
+      </script>
+
+      <script type="text/template" id="searchResultTemplate">
+        <div>
+          Name: <%= name %>
+          <img src="<%= url %>" />
+        </div>
+      </script>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
-
-    <!-- Custom Scripts -->
-    <script src="/js/trolley.js"></script> 
-
-</head>
-<body>
-
-<h1>I like trolleys!</h1>
-
-<div id="error"></div>
-
-<form action="">
-  <input id="search" type="text" placeholder="" />
-</form>
-
-<div id="searchResults">
-
-
-<script type="text/template" id="errorTemplate">
-  <span style="background-color: red; color: white;">Error: <%=statusCode%></span>
-</script>
-
-<script type="text/template" id="searchResultTemplate">
-  <div>
-    Name: <%= name %>
-    <img src="<%= url %>" />
-  </div>
-</script>
-
-</body>
+  </body>
 </html>
