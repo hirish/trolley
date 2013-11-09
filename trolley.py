@@ -2,12 +2,12 @@
 
 from flask import Flask
 
-app = Flask(__name__, static_folder='static', static_url_path='')
+application = Flask(__name__, static_folder='static', static_url_path='')
 
 
 @app.route('/')
 def hello_world():
-    return app.send_static_file('index.html')
+    return application.send_static_file('index.html')
 
 if __name__ == '__main__':
-    app.run()
+    application.run()
