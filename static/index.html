@@ -50,41 +50,37 @@
     <div class="container">
       <div id="error"></div>
 
-      <form action="javascript:hideKeyboard()" action="" role="form" id="searchForm" class="form-inline">
+      <form action="javascript:hideKeyboard()" role="form" id="searchForm" class="form-inline">
         <fieldset>
           <legend>What's for dinner?</legend>
-          <div class="row">
-            <div class="form-group col-md-10 col-xs-12">
-              <label for="search" class="sr-only">Desired Dish Name</label>
-              <input id="search" class="form-control input-lg" type="search" placeholder="e.g. Thai Green Curry, Bolognese&hellip;" />
-            </div>
-            <div class="form-group col-md-2 col-xs-12">
-              <button type="button" data-toggle="collapse" data-target="#servingSelector" class="btn btn-primary btn-lg">Just You?</button>
-            </div>
-          </div><!-- /.row -->
-          <div class="row">
-            <div id="servingSelector" class="collapse col-md-12">
-              <div class="btn-group" data-toggle="buttons">
-                <label class="btn btn-primary">
-                  <input type="radio" name="servings" value="1">Just You?
-                </label>
-                <label class="btn btn-primary">
-                  <input type="radio" name="servings" value="2">2 People
-                </label>
-                <label class="btn btn-primary">
-                  <input type="radio" name="servings" value="3">3 People
-                </label>
-                <label class="btn btn-primary">
-                  <input type="radio" name="servings" value="4">4 People
-                </label>
-                <label class="btn btn-primary">
-                  <input type="radio" name="servings" value="5">5 People
-                </label>
-                <label class="btn btn-primary">
-                  <input type="radio" name="servings" value=">5">Partaaay?
-                </label>
-              </div> 
-            </div>
+          <div class="form-group">
+            <label for="search" class="sr-only">Desired Dish Name</label>
+            <input id="search" class="form-control input-lg" type="search" placeholder="e.g. Thai Green Curry, Bolognese&hellip;" />
+          </div>
+          <div class="form-group">
+            <button type="button" data-toggle="collapse" data-target="#servingSelector" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-cutlery"></span> 1</button>
+          </div>
+          <div id="servingSelector" class="collapse col-md-12">
+            <div class="btn-group" data-toggle="buttons">
+              <label class="btn btn-primary">
+                <input type="radio" name="servings" value="1">1
+              </label>
+              <label class="btn btn-primary">
+                <input type="radio" name="servings" value="2">2
+              </label>
+              <label class="btn btn-primary">
+                <input type="radio" name="servings" value="3">3
+              </label>
+              <label class="btn btn-primary">
+                <input type="radio" name="servings" value="4">4
+              </label>
+              <label class="btn btn-primary">
+                <input type="radio" name="servings" value="5">5
+              </label>
+              <label class="btn btn-primary">
+                <input type="radio" name="servings" value=">5">&gt; 5
+              </label>
+            </div> 
           </div>
         </fieldset>
       </form>
