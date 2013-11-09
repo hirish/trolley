@@ -38,16 +38,16 @@
           <a class="navbar-brand" href="#">Trolley</a>
         </div>
         <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Eat Now</a></li>
-            <li><a href="#about">History</a></li>
-            <li><a href="#contact">Starred</a></li>
+          <ul class="nav navbar-nav" id="tab-switch">
+            <li class="active"><a href="#eat-now">Eat Now</a></li>
+            <li><a href="#history">History</a></li>
+            <li><a href="#starred">Starred</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
     </div>
 
-    <div class="container">
+    <div id="eat-now" class="container">
       <div id="error"></div>
 
       <form action="javascript:hideKeyboard()" role="form" id="searchForm" class="form-inline">
@@ -86,19 +86,26 @@
       </form>
 
       <div id="searchResults"></div>
-
-      <script type="text/template" id="errorTemplate">
-        <span style="background-color: red; color: white;">Error: <%=statusCode%></span>
-      </script>
-
-      <script type="text/template" id="searchResultTemplate">
-        <div>
-          Name: <%= name %>
-          <img src="<%= imageURL %>" />
-        </div>
-      </script>
     </div> <!-- /container -->
 
+    <div id="history" class="container" style="display: none;">
+      <div id="historyResults">History</div>
+    </div>
+
+    <div id="starred" class="container" style="display: none;">
+      Starred
+    </div>
+
+    <script type="text/template" id="errorTemplate">
+      <span style="background-color: red; color: white;">Error: <%=statusCode%></span>
+    </script>
+
+    <script type="text/template" id="searchResultTemplate">
+      <div>
+        Name: <%= name %>
+        <img src="<%= imageURL %>" />
+      </div>
+    </script>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->

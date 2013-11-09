@@ -38,7 +38,17 @@ $('#searchForm').on('change', 'input[name=servings]', ->
   $('#servingSelector').collapse('hide')
 )
 
+selected = '#eat-now'
+switchTab = (e) ->
+  $(@).tab('show')
+  $(selected).hide()
+
+  selected = $(@).attr('href')
+  $(selected).fadeIn(150)
+
 $ ->
+  $('#tab-switch li a').click switchTab
+
   window.userId = userId = 1
   pasta = new Ingredient
     id: 1
@@ -75,6 +85,14 @@ $ ->
   errorTemplate = $('#errorTemplate').html()
   searchResultTemplate = $('#searchResultTemplate').html()
 
+  createRecipeFromJSON = (jsonRecipe) ->
+    # Filler
+    return bolognese
+
+  #############################################################################
+  ### SEARCH
+  #############################################################################
+
   # Push the search request to the server
   search = (e) ->
     searchText = searchBox.val()
@@ -91,7 +109,8 @@ $ ->
 
   searchResultHandler = (jsonResults) ->
     # Turn JSON recipes into recipe objects
-    results = [$.parseJSON(jsonResults).results]
+    results = $.parseJSON(jsonResults).results
+    results = [results]
     recipeResults = (createRecipeFromJSON result for result in results)
 
     # Render the recipes
@@ -101,9 +120,36 @@ $ ->
     searchResultsBox.html('')
     searchResultsBox.append renderedResult for renderedResult in renderedResults
 
-  createRecipeFromJSON = (jsonRecipe) ->
-    # Filler
-    return bolognese
+  #############################################################################
+  ### HISTORY
+  #############################################################################
+
+  loadHistory = ->
+    console.log "Loading History..."
+    $.ajax "/#{userId}/history",
+      success: historyHandler
+      error: errorHandler
+
+  historyHandler = (jsonHistory) ->
+    # Parse JSON History into recipe objects
+    history = $.parseJSON jsonHistory.results
+    history = [history]
+    historyRecipes (createRecipeFromJSON result for result in history)
+
+    # Render recipes
+    renderedHistoryRecipes = (renderHistoryRecipe recipe for recipe in historyRecipes)
+
+    historyRecipesBox.html('')
+    historyRecipesBox.append renderedRecipe for renderedRecipe in renderedHistoryRecipes
+
+
+  renderHistoryRecipe = (result) ->
+    return true
+    #_.tempalte
+
+  #############################################################################
+  ### ERROR HANDLING
+  #############################################################################
 
   errorHandler = (reqObj) ->
     renderedTemplate = _.template errorTemplate, statusCode: 404

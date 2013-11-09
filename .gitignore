@@ -39,4 +39,5 @@ nosetests.xml
 *.swp
 *.swo
 logs.txt
-deploy.sh
+deploy
+testing/
