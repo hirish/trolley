@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 from flask import Flask
+from flask import request
+import json
 
 application = Flask(__name__, static_folder='static', static_url_path='')
 app = application
@@ -12,12 +14,12 @@ def index():
 @app.route('/<user>/search')
 def search(user):
     query = request.args.get('q')
-    return {'results': query}
+    return json.dumps({'results': query})
 
 @app.route('/<user>/history')
 def history(user):
     limit = request.args.get('limit')
-    return {'history': [], 'limit': limit}
+    return json.dumps({'history': [], 'limit': limit})
 
 @app.route('/<user>/star', methods=['GET','POST'])
 def star(user):
@@ -26,7 +28,7 @@ def star(user):
         recipe = request.args.get('recipe')
         #recipe.star()
         starred_recipes.append(recipe) # get all starred recipes
-    return {'star': starred_recipes}
+    return json.dumps({'star': starred_recipes})
 
 @app.route('/<user>/eatlist', methods=['GET','POST'])
 def eatlist(user):
@@ -35,11 +37,11 @@ def eatlist(user):
         recipe = request.args.get('recipe')
         # eatlist.add(recipe)
         eatlist.append(recipe)
-    return {'eatlist': eatlist}
+    return json.dumps({'eatlist': eatlist})
 
 @app.route('/<user>/buy')
 def buy(user):
-    return {'buy': True}
+    return json.dumps({'buy': True})
 
 if __name__ == '__main__':
     app.run(debug=True)
