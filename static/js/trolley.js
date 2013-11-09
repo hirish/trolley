@@ -40,8 +40,29 @@ EatListRecipe = Backbone.Model.extend({
 });
 
 $(function() {
-  var createRecipeFromJSON, errorBox, errorHandler, errorTemplate, renderSearchResult, search, searchBox, searchResultHandler, searchResultTemplate, searchResultsBox, throttledSearch, userId;
+  var bolognese, bologneseIngredients, createRecipeFromJSON, errorBox, errorHandler, errorTemplate, myBolognese, pasta, renderSearchResult, search, searchBox, searchResultHandler, searchResultTemplate, searchResultsBox, throttledSearch, userId;
   window.userId = userId = 1;
+  pasta = new Ingredient({
+    id: 1,
+    name: "Spaghetti",
+    amount: 150,
+    isVolume: false
+  });
+  bologneseIngredients = new Ingredients([pasta]);
+  bolognese = new Recipe({
+    id: 1,
+    name: "Spaghetti Bolognese",
+    imageURL: "http://upload.wikimedia.org/wikipedia/commons/e/e5/Heston_Blumenthal's_Perfect_Spaghetti_Bolognese.jpg",
+    ingredients: bologneseIngredients,
+    servingSize: 2,
+    isStarred: false,
+    rating: 5
+  });
+  myBolognese = new EatListRecipe({
+    baseRecipe: bolognese,
+    ingredients: bolognese.get('ingredients'),
+    user: 1
+  });
   searchBox = $('#search');
   searchResultsBox = $('#searchResults');
   errorBox = $('#error');
@@ -59,7 +80,7 @@ $(function() {
   renderSearchResult = function(result) {
     return _.template(searchResultTemplate, {
       name: result.get('name'),
-      url: result.get('url')
+      imageURL: result.get('imageURL')
     });
   };
   searchResultHandler = function(jsonResults) {
@@ -92,10 +113,7 @@ $(function() {
     return _results;
   };
   createRecipeFromJSON = function(jsonRecipe) {
-    return new Recipe({
-      name: "Spaghetti Bolognese",
-      url: "http://upload.wikimedia.org/wikipedia/commons/e/e5/Heston_Blumenthal's_Perfect_Spaghetti_Bolognese.jpg"
-    });
+    return bolognese;
   };
   errorHandler = function(reqObj) {
     var renderedTemplate;
