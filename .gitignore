@@ -37,4 +37,5 @@ nosetests.xml
 .elasticbeanstalk/
 
 *.swp
+*.swo
 logs.txt
