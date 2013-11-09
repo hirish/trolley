@@ -16,6 +16,7 @@ Ingredients = Backbone.Collection.extend({
 
 Recipe = Backbone.Model.extend({
   defaults: {
+    name: null,
     ingredients: new Ingredients,
     url: null
   }
@@ -26,29 +27,72 @@ Recipes = Backbone.Collection.extend({
 });
 
 $(function() {
-  var errorHandler, errorView, search, searchBox, searchResultHandler, throttledSearch;
-  window.searchBox = searchBox = $('#search');
+  var createRecipeFromJSON, errorBox, errorHandler, errorTemplate, renderSearchResult, search, searchBox, searchResultHandler, searchResultTemplate, searchResultsBox, throttledSearch, userId;
+  window.userId = userId = 1;
+  searchBox = $('#search');
+  searchResultsBox = $('#searchResults');
+  errorBox = $('#error');
+  errorTemplate = $('#errorTemplate').html();
+  searchResultTemplate = $('#searchResultTemplate').html();
   search = function(e) {
     var searchText;
     searchText = searchBox.val();
-    console.log(searchText);
-    return $.ajax('search?q=' + searchText, {
+    return $.ajax("/" + userId + "/search?q=" + searchText, {
       success: searchResultHandler,
       error: errorHandler
     });
   };
   throttledSearch = _.throttle(search, 250);
-  searchResultHandler = function(results) {
-    return console.log(results);
+  renderSearchResult = function(result) {
+    console.log("****RENDERING****");
+    console.log(result);
+    return _.template(searchResultTemplate, {
+      name: result.get('name'),
+      url: result.get('url')
+    });
   };
-  errorView = $('#error');
+  searchResultHandler = function(jsonResults) {
+    var recipeResult, recipeResults, renderedResult, renderedResults, result, results, _i, _len, _results;
+    results = [$.parseJSON(jsonResults).results];
+    recipeResults = (function() {
+      var _i, _len, _results;
+      _results = [];
+      for (_i = 0, _len = results.length; _i < _len; _i++) {
+        result = results[_i];
+        _results.push(createRecipeFromJSON(result));
+      }
+      return _results;
+    })();
+    console.log(recipeResults);
+    renderedResults = (function() {
+      var _i, _len, _results;
+      _results = [];
+      for (_i = 0, _len = recipeResults.length; _i < _len; _i++) {
+        recipeResult = recipeResults[_i];
+        _results.push(renderSearchResult(recipeResult));
+      }
+      return _results;
+    })();
+    searchResultsBox.html('');
+    _results = [];
+    for (_i = 0, _len = renderedResults.length; _i < _len; _i++) {
+      renderedResult = renderedResults[_i];
+      _results.push(searchResultsBox.append(renderedResult));
+    }
+    return _results;
+  };
+  createRecipeFromJSON = function(jsonRecipe) {
+    return new Recipe({
+      name: "Spaghetti Bolognese",
+      url: "http://upload.wikimedia.org/wikipedia/commons/e/e5/Heston_Blumenthal's_Perfect_Spaghetti_Bolognese.jpg"
+    });
+  };
   errorHandler = function(reqObj) {
-    var errorTemplate, renderedTemplate;
-    errorTemplate = $('#errorTemplate').html();
+    var renderedTemplate;
     renderedTemplate = _.template(errorTemplate, {
       statusCode: 404
     });
-    return errorView.html(renderedTemplate);
+    return errorBox.html(renderedTemplate);
   };
   return searchBox.keyup(throttledSearch);
 });

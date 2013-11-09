@@ -13,14 +13,28 @@
 
 </head>
 <body>
+
 <h1>I like trolleys!</h1>
+
 <div id="error"></div>
+
 <form action="">
   <input id="search" type="text" placeholder="" />
 </form>
 
+<div id="searchResults">
+
+
 <script type="text/template" id="errorTemplate">
-<span style="background-color: red; color: white;">Error: <%=statusCode%></span>
+  <span style="background-color: red; color: white;">Error: <%=statusCode%></span>
 </script>
+
+<script type="text/template" id="searchResultTemplate">
+  <div>
+    Name: <%= name %>
+    <img src="<%= url %>" />
+  </div>
+</script>
+
 </body>
 </html>
