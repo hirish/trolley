@@ -44,6 +44,13 @@ hideKeyboard = function() {
   return $("input").blur();
 };
 
+$('#searchForm').on('change', 'input[name=servings]', function() {
+  var selected;
+  selected = $.trim($(this).parent('label').text());
+  $('button[data-target=#servingSelector]').text(selected);
+  return $('#servingSelector').collapse('hide');
+});
+
 $(function() {
   var anotherBolognese, bolognese, bologneseIngredients, createRecipeFromJSON, eatlist, errorBox, errorHandler, errorTemplate, finalBolognese, historyHandler, loadHistory, myBolognese, pasta, renderHistoryRecipe, renderSearchResult, search, searchBox, searchResultHandler, searchResultTemplate, searchResultsBox, throttledSearch, userId;
   window.userId = userId = 1;
