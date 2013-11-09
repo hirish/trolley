@@ -122,5 +122,5 @@ $(function() {
     });
     return errorBox.html(renderedTemplate);
   };
-  return searchBox.keyup(throttledSearch);
+  return searchBox.change(throttledSearch);
 });

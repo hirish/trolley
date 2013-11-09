@@ -92,4 +92,4 @@ $ ->
     renderedTemplate = _.template errorTemplate, statusCode: 404
     errorBox.html renderedTemplate
 
-  searchBox.keyup throttledSearch
+  searchBox.change throttledSearch
