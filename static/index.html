@@ -55,21 +55,45 @@
       <form action="" role="form" class="form-inline">
         <fieldset>
           <legend>What's for dinner?</legend>
-          <div class="form-group">
-            <label for="search" class="sr-only">Desired Dish Name</label>
-            <input id="search" class="form-control input-lg" type="search" placeholder="e.g. Thai Green Curry, Bolognese&hellip;" />
-          </div>
-          <div class="form-group">
-            <label for="servings" class="sr-only">Number of Servings</label>
-            <select name="servings" id="servings" class="form-control input-lg">
-              <option selected># servings</option>
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-            </select>
-          </div>
+          <div class="row">
+            <div class="form-group col-md-10 col-xs-12">
+              <label for="search" class="sr-only">Desired Dish Name</label>
+              <input id="search" class="form-control input-lg" type="search" placeholder="e.g. Thai Green Curry, Bolognese&hellip;" />
+            </div>
+            <div class="form-group col-md-2 col-xs-12">
+              <label for="servings" class="sr-only">Number of Servings</label>
+              <select name="servings" id="servings" class="form-control input-lg">
+                <option selected># servings</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+              </select>
+            </div>
+          </div><!-- /.row -->
+          <div class="row">
+             <div class="btn-group col-xs-12" data-toggle="buttons">
+              <label class="btn btn-primary">
+                <input type="radio" name="servings" value="1">Just You?
+              </label>
+              <label class="btn btn-primary">
+                <input type="radio" name="servings" value="2">2 People
+              </label>
+              <label class="btn btn-primary">
+                <input type="radio" name="servings" value="3">3 People
+              </label>
+              <label class="btn btn-primary">
+                <input type="radio" name="servings" value="4">4 People
+              </label>
+              <label class="btn btn-primary">
+                <input type="radio" name="servings" value="5">5 People
+              </label>
+              <label class="btn btn-primary">
+                <input type="radio" name="servings" value=">5">Partaaay?
+              </label>
+            </div> 
+          </div><!-- /.row -->
         </fieldset>
       </form>
 
