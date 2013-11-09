@@ -45,7 +45,7 @@ hideKeyboard = function() {
 };
 
 $(function() {
-  var bolognese, bologneseIngredients, createRecipeFromJSON, errorBox, errorHandler, errorTemplate, myBolognese, pasta, renderSearchResult, search, searchBox, searchResultHandler, searchResultTemplate, searchResultsBox, throttledSearch, userId;
+  var anotherBolognese, bolognese, bologneseIngredients, createRecipeFromJSON, eatlist, errorBox, errorHandler, errorTemplate, finalBolognese, myBolognese, pasta, renderSearchResult, search, searchBox, searchResultHandler, searchResultTemplate, searchResultsBox, throttledSearch, userId;
   window.userId = userId = 1;
   pasta = new Ingredient({
     id: 1,
@@ -65,9 +65,17 @@ $(function() {
   });
   myBolognese = new EatListRecipe({
     baseRecipe: bolognese,
-    ingredients: bolognese.get('ingredients'),
-    user: 1
+    ingredients: bolognese.get('ingredients')
   });
+  anotherBolognese = new EatListRecipe({
+    baseRecipe: bolognese,
+    ingredients: bolognese.get('ingredients')
+  });
+  finalBolognese = new EatListRecipe({
+    baseRecipe: bolognese,
+    ingredients: bolognese.get('ingredients')
+  });
+  eatlist = [myBolognese, anotherBolognese, finalBolognese];
   searchBox = $('#search');
   searchResultsBox = $('#searchResults');
   errorBox = $('#error');

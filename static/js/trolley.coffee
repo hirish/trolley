@@ -53,7 +53,14 @@ $ ->
   myBolognese = new EatListRecipe
     baseRecipe: bolognese
     ingredients: bolognese.get('ingredients')
-    user: 1
+  anotherBolognese = new EatListRecipe
+    baseRecipe: bolognese
+    ingredients: bolognese.get('ingredients')
+  finalBolognese = new EatListRecipe
+    baseRecipe: bolognese
+    ingredients: bolognese.get('ingredients')
+
+  eatlist = [myBolognese, anotherBolognese, finalBolognese]
 
   searchBox = $('#search')
   searchResultsBox = $('#searchResults')
