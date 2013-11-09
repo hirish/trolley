@@ -31,7 +31,7 @@ def star(user):
 @app.route('/<user>/eatlist', methods=['GET','POST'])
 def eatlist(user):
     eatlist = []
-    if request.method = 'POST':
+    if request.method == 'POST':
         recipe = request.args.get('recipe')
         # eatlist.add(recipe)
         eatlist.append(recipe)
