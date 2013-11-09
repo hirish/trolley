@@ -28,6 +28,10 @@ EatListRecipe = Backbone.Model.extend
     ingredients: new Ingredients
     user: null
 
+hideKeyboard = ->
+  document.activeElement.blur()
+  $("input").blur()
+
 $ ->
   window.userId = userId = 1
   pasta = new Ingredient
