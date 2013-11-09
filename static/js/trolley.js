@@ -26,5 +26,29 @@ Recipes = Backbone.Collection.extend({
 });
 
 $(function() {
-  return console.log("Trolleys are fun");
+  var errorHandler, errorView, search, searchBox, searchResultHandler, throttledSearch;
+  window.searchBox = searchBox = $('#search');
+  search = function(e) {
+    var searchText;
+    searchText = searchBox.val();
+    console.log(searchText);
+    return $.ajax('search?q=' + searchText, {
+      success: searchResultHandler,
+      error: errorHandler
+    });
+  };
+  throttledSearch = _.throttle(search, 250);
+  searchResultHandler = function(results) {
+    return console.log(results);
+  };
+  errorView = $('#error');
+  errorHandler = function(reqObj) {
+    var errorTemplate, renderedTemplate;
+    errorTemplate = $('#errorTemplate').html();
+    renderedTemplate = _.template(errorTemplate, {
+      statusCode: 404
+    });
+    return errorView.html(renderedTemplate);
+  };
+  return searchBox.keyup(throttledSearch);
 });

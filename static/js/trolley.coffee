@@ -16,5 +16,24 @@ Recipe = Backbone.Model.extend
 Recipes = Backbone.Collection.extend
   model: Recipe
 
+
 $ ->
-  console.log "Trolleys are fun"
+  window.searchBox = searchBox = $('#search')
+  search = (e) ->
+    searchText = searchBox.val()
+    console.log searchText
+    $.ajax 'search?q=' + searchText,
+      success: searchResultHandler
+      error: errorHandler
+  throttledSearch = _.throttle search, 250
+
+  searchResultHandler = (results) ->
+    console.log results
+
+  errorView = $('#error')
+  errorHandler = (reqObj) ->
+    errorTemplate = $('#errorTemplate').html()
+    renderedTemplate = _.template errorTemplate, statusCode: 404
+    errorView.html renderedTemplate
+
+  searchBox.keyup throttledSearch

@@ -13,6 +13,14 @@
 
 </head>
 <body>
-    <h1>I like trolleys!</h1>
+<h1>I like trolleys!</h1>
+<div id="error"></div>
+<form action="">
+  <input id="search" type="text" placeholder="" />
+</form>
+
+<script type="text/template" id="errorTemplate">
+<span style="background-color: red; color: white;">Error: <%=statusCode%></span>
+</script>
 </body>
 </html>
