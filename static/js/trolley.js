@@ -45,7 +45,7 @@ hideKeyboard = function() {
 };
 
 $(function() {
-  var anotherBolognese, bolognese, bologneseIngredients, createRecipeFromJSON, eatlist, errorBox, errorHandler, errorTemplate, finalBolognese, myBolognese, pasta, renderSearchResult, search, searchBox, searchResultHandler, searchResultTemplate, searchResultsBox, throttledSearch, userId;
+  var anotherBolognese, bolognese, bologneseIngredients, createRecipeFromJSON, eatlist, errorBox, errorHandler, errorTemplate, finalBolognese, historyHandler, loadHistory, myBolognese, pasta, renderHistoryRecipe, renderSearchResult, search, searchBox, searchResultHandler, searchResultTemplate, searchResultsBox, throttledSearch, userId;
   window.userId = userId = 1;
   pasta = new Ingredient({
     id: 1,
@@ -81,6 +81,12 @@ $(function() {
   errorBox = $('#error');
   errorTemplate = $('#errorTemplate').html();
   searchResultTemplate = $('#searchResultTemplate').html();
+  createRecipeFromJSON = function(jsonRecipe) {
+    return bolognese;
+  };
+  /* SEARCH
+  */
+
   search = function(e) {
     var searchText;
     searchText = searchBox.val();
@@ -98,7 +104,8 @@ $(function() {
   };
   searchResultHandler = function(jsonResults) {
     var recipeResult, recipeResults, renderedResult, renderedResults, result, results, _i, _len, _results;
-    results = [$.parseJSON(jsonResults).results];
+    results = $.parseJSON(jsonResults).results;
+    results = [results];
     recipeResults = (function() {
       var _i, _len, _results;
       _results = [];
@@ -125,9 +132,52 @@ $(function() {
     }
     return _results;
   };
-  createRecipeFromJSON = function(jsonRecipe) {
-    return bolognese;
+  /* HISTORY
+  */
+
+  loadHistory = function() {
+    console.log("Loading History...");
+    return $.ajax("/" + userId + "/history", {
+      success: historyHandler,
+      error: errorHandler
+    });
   };
+  historyHandler = function(jsonHistory) {
+    var history, recipe, renderedHistoryRecipes, renderedRecipe, result, _i, _len, _results;
+    history = $.parseJSON(jsonHistory.results);
+    history = [history];
+    historyRecipes((function() {
+      var _i, _len, _results;
+      _results = [];
+      for (_i = 0, _len = history.length; _i < _len; _i++) {
+        result = history[_i];
+        _results.push(createRecipeFromJSON(result));
+      }
+      return _results;
+    })());
+    renderedHistoryRecipes = (function() {
+      var _i, _len, _results;
+      _results = [];
+      for (_i = 0, _len = historyRecipes.length; _i < _len; _i++) {
+        recipe = historyRecipes[_i];
+        _results.push(renderHistoryRecipe(recipe));
+      }
+      return _results;
+    })();
+    historyRecipesBox.html('');
+    _results = [];
+    for (_i = 0, _len = renderedHistoryRecipes.length; _i < _len; _i++) {
+      renderedRecipe = renderedHistoryRecipes[_i];
+      _results.push(historyRecipesBox.append(renderedRecipe));
+    }
+    return _results;
+  };
+  renderHistoryRecipe = function(result) {
+    return true;
+  };
+  /* ERROR HANDLING
+  */
+
   errorHandler = function(reqObj) {
     var renderedTemplate;
     renderedTemplate = _.template(errorTemplate, {
