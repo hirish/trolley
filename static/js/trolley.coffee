@@ -38,7 +38,17 @@ $('#searchForm').on('change', 'input[name=servings]', ->
   $('#servingSelector').collapse('hide')
 )
 
+selected = '#eat-now'
+switchTab = (e) ->
+  $(@).tab('show')
+  $(selected).hide()
+
+  selected = $(@).attr('href')
+  $(selected).fadeIn(150)
+
 $ ->
+  $('#tab-switch li a').click switchTab
+
   window.userId = userId = 1
   pasta = new Ingredient
     id: 1
