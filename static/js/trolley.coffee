@@ -161,16 +161,16 @@ $ ->
 
   loadHistory = ->
     console.log "Loading History..."
-    $.ajax "/#{userId}/history",
+    console.log "Fix history"
+    # $.ajax "/#{userId}/history",
+    $.ajax "/#{userId}/search?q=spag bol",
       success: historyHandler
       error: errorHandler
 
   historyHandler = (jsonHistory) ->
     # Parse JSON History into recipe objects
-    # history = $.parseJSON jsonHistory.results
-    # history = [history]
-    # historyRecipes (createRecipeFromJSON result for result in history)
-    historyRecipes = [bolognese, curry]
+    history = $.parseJSON(jsonHistory).results
+    historyRecipes = (createRecipeFromJSON result for result in history)
 
     # Render recipes
     renderedHistoryRecipes = (renderRecipe historyRecipeTemplate, recipe for recipe in historyRecipes)
