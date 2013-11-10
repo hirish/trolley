@@ -2,7 +2,7 @@
 /* MODELS
 */
 
-var EatList, EatListRecipe, Ingredient, Ingredients, Recipe, Recipes, addedToEatListHandler, buyHandler, cancelHandler, createIngredientFromJSON, createRecipeFromJSON, flash, getIngredientsForRecipe, hideKeyboard, initEatListFromServer, initEatListHandler, recipeClickHandler, submitHandler;
+var EatList, EatListRecipe, Ingredient, Ingredients, Recipe, Recipes, addedToEatListHandler, buyHandler, cancelHandler, createIngredientFromJSON, createRecipeFromJSON, flash, getIngredientsForRecipe, hideKeyboard, ingredientTypeToUnit, initEatListFromServer, initEatListHandler, recipeClickHandler, submitHandler;
 
 Ingredient = Backbone.Model.extend({
   defaults: {
@@ -182,7 +182,7 @@ addedToEatListHandler = function(eatListRecipe) {
   eatListRecipeTemplate = $('#eatListRecipeTemplate').html();
   eatListIngredientTemplate = $('#eatListIngredientTemplate').html();
   rendered = _.template(eatListRecipeTemplate, {
-    recipe: baseRecipe
+    name: baseRecipe.get('name')
   });
   eatListBox.append(rendered);
   recipeElement = eatListBox.children().last();
@@ -191,11 +191,24 @@ addedToEatListHandler = function(eatListRecipe) {
   for (_i = 0, _len = ingredients.length; _i < _len; _i++) {
     ingredient = ingredients[_i];
     rendered = _.template(eatListIngredientTemplate, {
-      ingredient: ingredient
+      name: ingredient.get('name'),
+      quantity: ingredient.get('quantity'),
+      price: "$5",
+      unit: ingredientTypeToUnit(ingredient.get('type'))
     });
     _results.push(recipeBox.append(rendered));
   }
   return _results;
+};
+
+ingredientTypeToUnit = function(type) {
+  if (type === 'volume') {
+    return 'ml';
+  }
+  if (type === 'weight') {
+    return 'g';
+  }
+  return '';
 };
 
 buyHandler = function(e) {
@@ -223,6 +236,7 @@ cancelHandler = function(e) {
 
 submitHandler = function(e) {
   var done, reset;
+  $.ajax('/email');
   $('#submitIcon').removeClass('glyphicon-cutlery');
   $('#submitIcon').addClass('glyphicon-shopping-cart');
   done = function() {

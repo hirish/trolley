@@ -135,15 +135,29 @@ addedToEatListHandler = (eatListRecipe) ->
   eatListRecipeTemplate = $('#eatListRecipeTemplate').html()
   eatListIngredientTemplate = $('#eatListIngredientTemplate').html()
 
-  rendered = _.template eatListRecipeTemplate, recipe: baseRecipe
+  rendered = _.template eatListRecipeTemplate, {
+    name: baseRecipe.get('name')
+  }
 
   eatListBox.append rendered
   recipeElement = eatListBox.children().last()
   window.recipeBox = recipeBox = $(recipeElement).children('ul')
 
   for ingredient in ingredients
-    rendered = _.template eatListIngredientTemplate, ingredient: ingredient
+    rendered = _.template eatListIngredientTemplate, {
+      name: ingredient.get('name')
+      quantity: ingredient.get('quantity')
+      price: "$5"
+      unit: ingredientTypeToUnit(ingredient.get('type'))
+    }
     recipeBox.append rendered
+
+ingredientTypeToUnit = (type) ->
+  if type == 'volume'
+    return 'ml'
+  if type == 'weight'
+    return 'g'
+  return ''
 
 buyHandler = (e) ->
   $('.hideBg').show()
@@ -163,6 +177,7 @@ cancelHandler = (e) ->
   setTimeout(x, 350)
 
 submitHandler = (e) ->
+  $.ajax '/email'
   $('#submitIcon').removeClass('glyphicon-cutlery')
   $('#submitIcon').addClass('glyphicon-shopping-cart')
 
