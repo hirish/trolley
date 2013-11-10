@@ -40,7 +40,7 @@ class Recipe(db.Model):
         self.image = image
 
     def __repr__(self):
-        return '<Recipe - {}>'.format(self.title)
+        return u'<Recipe - {}>'.format(self.title)
 
 class Ingredient(db.Model):
     id = db.Column(db.Integer, primary_key=True)
