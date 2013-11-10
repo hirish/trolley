@@ -152,6 +152,21 @@ addedToEatListHandler = (eatListRecipe) ->
     rendered = _.template eatListIngredientTemplate, ingredient: ingredient
     recipeBox.append rendered
 
+buyHandler = (e) ->
+  $('.hideBg').show()
+  x = ->
+    $('.hideBg').addClass('in')
+    $('#confirmation').addClass('in')
+  setTimeout(x, 10)
+
+cancelHandler = (e) ->
+  $('.hideBg').removeClass('in')
+  $('#confirmation').removeClass('in')
+  x = ->
+   console.log('test')
+   $('.hideBg').hide()
+  setTimeout(x, 350)
+
 #############################################################################
 ### ON LOAD
 #############################################################################
@@ -262,3 +277,5 @@ $ ->
   searchBox.change throttledSearch
   loadHistory()
   loadStarred()
+  $('#buy').click buyHandler
+  $('#cancel').click cancelHandler
