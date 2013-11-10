@@ -38,59 +38,62 @@
           <a class="navbar-brand" href="#">Trolley</a>
         </div>
         <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav" id="tab-switch">
-            <li class="active"><a href="#eat-now">Eat Now</a></li>
-            <li><a href="#history">History</a></li>
-            <li><a href="#starred">Starred</a></li>
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#eat-now" data-toggle="tab">Eat Now</a></li>
+            <li><a href="#history" data-toggle="tab">History</a></li>
+            <li><a href="#starred" data-toggle="tab">Starred</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
     </div>
 
-    <div id="eat-now" class="container">
-      <div id="error"></div>
+    <div class="tab-content">
+      <div id="eat-now" class="container tab-pane active">
+        <div id="error"></div>
 
-      <form action="javascript:hideKeyboard()" role="form" id="searchForm" class="form-inline">
-        <fieldset>
-          <legend>What's for dinner?</legend>
-          <div class="row">
-            <div class="form-group col-md-10 col-xs-9">
-              <label for="search" class="sr-only">Desired Dish Name</label>
-              <input id="search" type="search" class="form-control input-lg" placeholder="e.g. Thai Green Curry, Bolognese&hellip;" />
-            </div>
-            <div class="form-group col-md-2 col-xs-3">
-              <select id="servings" name="servings" class="form-control input-lg">
-                <option selected>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-                <option>6</option>
-                <option>7</option>
-                <option>8</option>
-                <option>9</option>
-              </select>
-            </div>
-          </div><!-- /.row -->
-        </fieldset>
-      </form>
+        <form action="javascript:hideKeyboard()" role="form" id="searchForm" class="form-inline">
+          <fieldset>
+            <legend>What's for dinner?</legend>
+            <div class="row">
+              <div class="form-group col-md-10 col-xs-9">
+                <label for="search" class="sr-only">Desired Dish Name</label>
+                <input id="search" type="search" class="form-control input-lg" placeholder="e.g. Thai Green Curry, Bolognese&hellip;" />
+              </div>
+              <div class="form-group col-md-2 col-xs-3">
+                <select id="servings" name="servings" class="form-control input-lg">
+                  <option selected>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                  <option>6</option>
+                  <option>7</option>
+                  <option>8</option>
+                  <option>9</option>
+                </select>
+              </div>
+            </div><!-- /.row -->
+          </fieldset>
+        </form>
 
-      <div class="carousel slide hidden">
-        <div id="searchResults" class="carousel-inner">
-          <!-- results here -->
+        <div class="carousel slide hidden">
+          <div id="searchResults" class="carousel-inner">
+            <!-- results here -->
+          </div>
         </div>
-      </div>
 
-    </div> <!-- /container -->
+      </div><!-- /.container -->
 
-    <div id="history" class="container" style="display: none;">
-      History
-      <div id="historyResults"></div>
-    </div>
+      <div id="history" class="container tab-pane">
+        History
+        <div id="historyResults"></div>
+      </div><!-- /.container -->
 
-    <div id="starred" class="container" style="display: none;">
-      Starred
-    </div>
+      <div id="starred" class="container tab-pane">
+        Starred
+      </div><!-- /.container -->
+
+    </div><!-- /.tab-content -->
 
     <script type="text/template" id="errorTemplate">
       <span style="background-color: red; color: white;">Error: <%=statusCode%></span>

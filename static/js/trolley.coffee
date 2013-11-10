@@ -57,18 +57,7 @@ $('#searchResults').parent('.carousel').swipe(
       when 'right' then $(this).carousel('prev')
 )
 
-selected = '#eat-now'
-switchTab = (e) ->
-  $('.navbar-collapse').collapse('hide')
-  $(@).tab('show')
-  $(selected).hide()
-
-  selected = $(@).attr('href')
-  $(selected).fadeIn(150)
-
 $ ->
-  $('#tab-switch li a').click switchTab
-
   window.userId = userId = 1
   pasta = new Ingredient
     id: 1
