@@ -70,14 +70,16 @@ h1, h2, h3, h4, h5, h6, legend {
   }
 }
 
+#history {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
 #historyResults, #starredResults {
   list-style: none;
   padding-left: 0;
 
   li {
-    padding-bottom: 1em;
-    margin-bottom: 1em;
-    border-bottom: 1px solid #eee;
 
     header {
       h2, .rating {
@@ -92,8 +94,27 @@ h1, h2, h3, h4, h5, h6, legend {
       }
     }
 
-    img {
-      width: 100%;
+    div.imageHolder {
+      background-position-y: 50%;
+      height: 200px;
+      position: relative;
     }
+
+    div.overlay {
+      background-color: rgba(0,0,0,0.7);
+      color: white;
+      position: absolute;
+      bottom: 0px;
+      left: 0px;
+      width: 100%;
+      padding: 10px 20px;
+    }
+
+    h2 {
+      color: white !important;
+      font-size: 24px;
+      -webkit-font-smoothing: antialiased;
+    }
+
   }
 }

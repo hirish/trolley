@@ -5,7 +5,8 @@ body {
   color: #555; }
 
 body > .navbar-fixed-top {
-  background: #e82c0c; }
+  background: #e82c0c;
+  border-bottom: 0; }
   body > .navbar-fixed-top .navbar-brand, body > .navbar-fixed-top .navbar-brand:hover, body > .navbar-fixed-top .navbar-nav > li > a, body > .navbar-fixed-top .navbar-nav > li > a:hover, body > .navbar-fixed-top .navbar-nav > li.active > a, body > .navbar-fixed-top .navbar-nav > li.active > a:hover {
     color: #fff; }
   body > .navbar-fixed-top .navbar-nav > li.active > a {
@@ -32,24 +33,40 @@ h1, h2, h3, h4, h5, h6, legend {
     padding-right: 0; }
 
 .carousel .item {
+  color: #fff;
   overflow: hidden; }
+  .carousel .item h1, .carousel .item h2, .carousel .item h3 {
+    color: inherit; }
   .carousel .item img {
     width: 100%; }
+
+#history {
+  padding-left: 0px;
+  padding-right: 0px; }
 
 #historyResults, #starredResults {
   list-style: none;
   padding-left: 0; }
-  #historyResults li, #starredResults li {
-    padding-bottom: 1em;
-    margin-bottom: 1em;
-    border-bottom: 1px solid #eee; }
-    #historyResults li header h2, #historyResults li header .rating, #starredResults li header h2, #starredResults li header .rating {
-      display: inline-block; }
-    #historyResults li header h2, #starredResults li header h2 {
-      margin-right: 0.5em; }
-    #historyResults li header .rating, #starredResults li header .rating {
-      vertical-align: middle;
-      font-size: 1.4em;
-      color: #ffc90e; }
-    #historyResults li img, #starredResults li img {
-      width: 100%; }
+  #historyResults li header h2, #historyResults li header .rating, #starredResults li header h2, #starredResults li header .rating {
+    display: inline-block; }
+  #historyResults li header h2, #starredResults li header h2 {
+    margin-right: 0.5em; }
+  #historyResults li header .rating, #starredResults li header .rating {
+    font-size: 1.4em;
+    color: #ffc90e; }
+  #historyResults li div.imageHolder, #starredResults li div.imageHolder {
+    background-position-y: 50%;
+    height: 200px;
+    position: relative; }
+  #historyResults li div.overlay, #starredResults li div.overlay {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    padding: 10px 20px; }
+  #historyResults li h2, #starredResults li h2 {
+    color: white !important;
+    font-size: 24px;
+    -webkit-font-smoothing: antialiased; }
