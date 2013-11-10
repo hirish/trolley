@@ -60,8 +60,12 @@ Recipe = Backbone.Model.extend({
       url: this.get('url')
     };
   },
-  addToShoppingList: function() {
+  addToShoppingList: function(addToServer) {
     var eatListRecipe;
+    if (addToServer === true) {
+      console.log("Firing at " + '/1/eatlist/' + this.get('id'));
+      $.ajax('/1/eatlist/' + this.get('id'));
+    }
     eatListRecipe = new EatListRecipe({
       baseRecipe: this,
       ingredients: this.get('ingredients'),
@@ -116,7 +120,7 @@ createRecipeFromJSON = function(jsonRecipe) {
     isStarred: jsonRecipe.isStarred,
     name: jsonRecipe.name,
     id: jsonRecipe.id,
-    description: "This description should be changed"
+    description: jsonRecipe.description
   });
   recipes.add(newRecipe);
   return newRecipe;
@@ -147,8 +151,7 @@ getIngredientsForRecipe = function(recipe) {
 
 initEatListFromServer = function() {
   return $.ajax('/1/eatlist', {
-    success: initEatListHandler,
-    error: errorHandler
+    success: initEatListHandler
   });
 };
 
@@ -168,7 +171,7 @@ recipeClickHandler = function(e, t) {
     console.log("Clicked on a recipe with an unloaded id (i.e. id could not be found in window.recipes)");
     return;
   }
-  return recipe.addToShoppingList();
+  return recipe.addToShoppingList(true);
 };
 
 addedToEatListHandler = function(eatListRecipe) {
@@ -245,7 +248,8 @@ submitHandler = function(e) {
 
 initEatListHandler = function(jsonEatList) {
   var eatList, eatListRecipes, recipe, result, _i, _len, _results;
-  eatList = $.parseJSON(jsonEatList).results;
+  console.log(jsonEatList);
+  eatList = $.parseJSON(jsonEatList).eatlist;
   eatListRecipes = (function() {
     var _i, _len, _results;
     _results = [];
@@ -258,7 +262,7 @@ initEatListHandler = function(jsonEatList) {
   _results = [];
   for (_i = 0, _len = eatListRecipes.length; _i < _len; _i++) {
     recipe = eatListRecipes[_i];
-    _results.push(recipe.addToShoppingList());
+    _results.push(recipe.addToShoppingList(false));
   }
   return _results;
 };
@@ -426,6 +430,7 @@ $(function() {
       }
       return _results;
     })();
+    window.s = starredRecipes;
     renderedStarredRecipes = (function() {
       var _i, _len, _results;
       _results = [];

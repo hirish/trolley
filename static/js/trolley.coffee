@@ -43,7 +43,11 @@ Recipe = Backbone.Model.extend
       url: @.get('url')
     }
 
-  addToShoppingList: ->
+  addToShoppingList: (addToServer) ->
+    if addToServer == true
+      console.log "Firing at " + '/1/eatlist/' + @.get('id')
+      $.ajax('/1/eatlist/' + @.get('id'))
+
     eatListRecipe = new EatListRecipe
       baseRecipe: @
       ingredients: @.get('ingredients')
@@ -86,7 +90,7 @@ createRecipeFromJSON = (jsonRecipe) ->
     isStarred: jsonRecipe.isStarred
     name: jsonRecipe.name
     id: jsonRecipe.id
-    description: "This description should be changed"
+    description: jsonRecipe.description
   recipes.add newRecipe
   return newRecipe
 
@@ -105,7 +109,6 @@ getIngredientsForRecipe = (recipe) ->
 initEatListFromServer = ->
   $.ajax '/1/eatlist',
     success: initEatListHandler
-    error: errorHandler
 
 #############################################################################
 ### CLICK HANDLERS
@@ -122,7 +125,7 @@ recipeClickHandler = (e, t) ->
     console.log "Clicked on a recipe with an unloaded id (i.e. id could not be found in window.recipes)"
     return
 
-  recipe.addToShoppingList()
+  recipe.addToShoppingList(true)
 
 addedToEatListHandler = (eatListRecipe) ->
   baseRecipe = eatListRecipe.get('baseRecipe')
@@ -187,10 +190,11 @@ submitHandler = (e) ->
   setTimeout(reset, 1000)
 
 initEatListHandler = (jsonEatList) ->
-  eatList = $.parseJSON(jsonEatList).results
+  console.log jsonEatList
+  eatList = $.parseJSON(jsonEatList).eatlist
   eatListRecipes = (createRecipeFromJSON result for result in eatList)
 
-  recipe.addToShoppingList() for recipe in eatListRecipes
+  recipe.addToShoppingList(false) for recipe in eatListRecipes
 
 #############################################################################
 ### MISC LISTENERS
@@ -312,6 +316,7 @@ $ ->
     # Parse JSON Starred into recipe objects
     starred = $.parseJSON(jsonStarred).results
     starredRecipes = (createRecipeFromJSON result for result in starred)
+    window.s = starredRecipes
 
     # Render recipes
     renderedStarredRecipes = (renderRecipe starredRecipeTemplate, recipe for recipe in starredRecipes)
