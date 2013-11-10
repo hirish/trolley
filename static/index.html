@@ -91,6 +91,7 @@
 
       <div id="starred" class="container tab-pane">
         Starred
+        <div id="starredResults"></div>
       </div><!-- /.container -->
 
     </div><!-- /.tab-content -->
@@ -111,8 +112,10 @@
 
     <script type="text/template" id="historyRecipeTemplate">
       <div>
-        Name: <%= name %>
+        <strong><%= name %></strong><br />
         <img src="<%= imageUrl %>" width="50" height="50" />
+        <%= description %><br />
+        <% for(var i = 0; i < rating; i++){ %><span class="glyphicon glyphicon-star"></span><% } %><% for(var i = 0; i < 5 - rating; i++){ %><span class="glyphicon glyphicon-star-empty"></span><% } %>
       </div>
     </script>
 

@@ -59,53 +59,17 @@ $('#searchResults').parent('.carousel').swipe(
 
 $ ->
   window.userId = userId = 1
-  pasta = new Ingredient
-    id: 1
-    name: "Spaghetti"
-    amount: 150
-    isVolume: false
-  bologneseIngredients = new Ingredients [pasta]
-
-  curry = new Recipe
-      id: 1
-      name: "Curry"
-      imageUrl: "http://d1jrw5jterzxwu.cloudfront.net/sites/default/files/article_media/curry.jpg"
-      ingredients: bologneseIngredients
-      servingSize: 2
-      isStarred: false
-      rating: 5
-      description: "I really like curry."
-
-  bolognese = new Recipe
-      id: 1
-      name: "Spaghetti Bolognese"
-      imageUrl: "http://upload.wikimedia.org/wikipedia/commons/e/e5/Heston_Blumenthal's_Perfect_Spaghetti_Bolognese.jpg"
-      ingredients: bologneseIngredients
-      servingSize: 2
-      isStarred: false
-      rating: 5
-      description: "This is a really delicious bolognese sauce made with the finest truffles."
-
-  myBolognese = new EatListRecipe
-    baseRecipe: bolognese
-    ingredients: bolognese.get('ingredients')
-  anotherBolognese = new EatListRecipe
-    baseRecipe: bolognese
-    ingredients: bolognese.get('ingredients')
-  finalBolognese = new EatListRecipe
-    baseRecipe: bolognese
-    ingredients: bolognese.get('ingredients')
-
-  eatlist = [myBolognese, anotherBolognese, finalBolognese]
 
   searchBox = $('#search')
   searchResultsBox = $('#searchResults')
   historyRecipesBox = $('#historyResults')
+  starredRecipesBox = $('#starredResults')
   errorBox = $('#error')
 
   errorTemplate = $('#errorTemplate').html()
   searchResultTemplate = $('#searchResultTemplate').html()
   historyRecipeTemplate = $('#historyRecipeTemplate').html()
+  starredRecipeTemplate = $('#historyRecipeTemplate').html()
 
   createRecipeFromJSON = (jsonRecipe) ->
     new Recipe
@@ -165,10 +129,8 @@ $ ->
 
   historyHandler = (jsonHistory) ->
     # Parse JSON History into recipe objects
-    # history = $.parseJSON jsonHistory.results
-    # history = [history]
-    # historyRecipes (createRecipeFromJSON result for result in history)
-    historyRecipes = [bolognese, curry]
+    history = $.parseJSON(jsonHistory).results
+    historyRecipes = (createRecipeFromJSON result for result in history)
 
     # Render recipes
     renderedHistoryRecipes = (renderRecipe historyRecipeTemplate, recipe for recipe in historyRecipes)
@@ -176,10 +138,26 @@ $ ->
     historyRecipesBox.html('')
     historyRecipesBox.append renderedRecipe for renderedRecipe in renderedHistoryRecipes
 
+  #############################################################################
+  ### STARRED
+  #############################################################################
 
-  renderHistoryRecipe = (result) ->
-    return true
-    #_.tempalte
+  loadStarred = ->
+    console.log "Loading Starred..."
+    $.ajax "/#{userId}/star",
+      success: starredHandler
+      error: errorHandler
+
+  starredHandler = (jsonStarred) ->
+    # Parse JSON Starred into recipe objects
+    starred = $.parseJSON(jsonStarred).results
+    starredRecipes = (createRecipeFromJSON result for result in starred)
+
+    # Render recipes
+    renderedStarredRecipes = (renderRecipe starredRecipeTemplate, recipe for recipe in starredRecipes)
+
+    starredRecipesBox.html('')
+    starredRecipesBox.append renderedRecipe for renderedRecipe in renderedStarredRecipes
 
   #############################################################################
   ### ERROR HANDLING
@@ -191,3 +169,4 @@ $ ->
 
   searchBox.change throttledSearch
   loadHistory()
+  loadStarred()
