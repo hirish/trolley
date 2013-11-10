@@ -2,7 +2,7 @@
 from flask import Flask, request
 import config
 import json
-from models import Recipe, Eatlist, db
+from models import Recipe, Ingredient, Eatlist, db
 from utils import get_recipe
 
 application = config.application
@@ -55,9 +55,18 @@ def recipe(recipe):
 
 @application.route('/recipe/<recipe>/ingredients', methods=['GET'])
 def ingredients(recipe):
-    # recipe = get_recipe(recipe) 
-    # return json.dumps(recipe)
-    return '{"results":[{"name":"Spaghetti","type":"weight","quantity":5},{"name":"Tomatoes","type":"volume","quantity":300},{"name":"Beef","type":"weight","quantity":600},{"name":"Basil","type":"count","quantity":1}]}'
+    ings = Ingredient.query.filter_by(recipe_id=recipe).all()
+    to_return = []
+    for i in ings:
+        i_dict = {
+            'id': i.id,
+            'name': i.name,
+            'type': i.type,
+            'quantity': i.quantity
+        }
+        to_return.append(i_dict)
+    return json.dumps({'results': to_return})
+    #return '{"results":[{"name":"Spaghetti","type":"weight","quantity":5},{"name":"Tomatoes","type":"volume","quantity":300},{"name":"Beef","type":"weight","quantity":600},{"name":"Basil","type":"count","quantity":1}]}'
 
 @application.route('/<user>/history')
 def history(user):
