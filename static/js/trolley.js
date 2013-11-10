@@ -97,28 +97,6 @@ hideKeyboard = function() {
   return $("input").blur();
 };
 
-$('#searchForm').on('change', 'input[name=servings]', function() {
-  var selected;
-  selected = $.trim($(this).parent('label').text());
-  $('button[data-target=#servingSelector]').text(selected);
-  return $('#servingSelector').collapse('hide');
-});
-
-$('.navbar-collapse').on('click', 'a[data-toggle=tab]', function() {
-  return $(this).parents('.navbar-collapse').removeClass('in').addClass('collapse');
-});
-
-$('#searchResults').parent('.carousel').swipe({
-  swipe: function(event, direction, distance, duration, fingerCount) {
-    switch (direction) {
-      case 'left':
-        return $(this).carousel('next');
-      case 'right':
-        return $(this).carousel('prev');
-    }
-  }
-});
-
 /* UTILITY FUNCTIONS
 */
 
@@ -178,9 +156,10 @@ initEatListFromServer = function() {
 */
 
 
-recipeClickHandler = function(e) {
-  var id, recipe;
-  id = parseInt($(this).attr('recipe-id'));
+recipeClickHandler = function(e, t) {
+  var id, item, recipe;
+  item = $(this).is('.carousel') ? $('.active', this) : $(this);
+  id = parseInt(item.attr('recipe-id'));
   recipe = recipes.find(function(recipe) {
     return recipe.get('id') === id;
   });
@@ -283,6 +262,33 @@ initEatListHandler = function(jsonEatList) {
   return _results;
 };
 
+/* MISC LISTENERS
+*/
+
+
+$('#searchForm').on('change', 'input[name=servings]', function() {
+  var selected;
+  selected = $.trim($(this).parent('label').text());
+  $('button[data-target=#servingSelector]').text(selected);
+  return $('#servingSelector').collapse('hide');
+});
+
+$('.navbar-collapse').on('click', 'a[data-toggle=tab]', function() {
+  return $(this).parents('.navbar-collapse').removeClass('in').addClass('collapse');
+});
+
+$('#searchResults').parent('.carousel').swipe({
+  swipe: function(event, direction, distance, duration, fingerCount) {
+    switch (direction) {
+      case 'left':
+        return $(this).carousel('next');
+      case 'right':
+        return $(this).carousel('prev');
+    }
+  },
+  tap: recipeClickHandler
+});
+
 /* ON LOAD
 */
 
@@ -344,7 +350,6 @@ $(function() {
       searchResultsBox.append(renderedResult);
     }
     $('#searchResults .item:first').addClass('active');
-    searchResultsBox.children().click(recipeClickHandler);
     carousel = $('#searchResults').parent('.carousel');
     if (results.length > 0) {
       return carousel.removeClass('hidden').carousel();

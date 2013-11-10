@@ -70,23 +70,6 @@ hideKeyboard = ->
   document.activeElement.blur()
   $("input").blur()
 
-$('#searchForm').on('change', 'input[name=servings]', ->
-  selected = $.trim($(@).parent('label').text())
-  $('button[data-target=#servingSelector]').text(selected)
-  $('#servingSelector').collapse('hide')
-)
-
-$('.navbar-collapse').on('click', 'a[data-toggle=tab]', ->
-  $(@).parents('.navbar-collapse').removeClass('in').addClass('collapse')
-)
-
-$('#searchResults').parent('.carousel').swipe(
-  swipe: (event, direction, distance, duration, fingerCount) ->
-    switch direction
-      when 'left' then $(this).carousel('next')
-      when 'right' then $(this).carousel('prev')
-)
-
 #############################################################################
 ### UTILITY FUNCTIONS
 #############################################################################
@@ -128,8 +111,9 @@ initEatListFromServer = ->
 ### CLICK HANDLERS
 #############################################################################
 
-recipeClickHandler = (e) ->
-  id = parseInt $(@).attr('recipe-id')
+recipeClickHandler = (e, t) ->
+  item = if $(@).is('.carousel') then $('.active', @) else $(@)
+  id = parseInt item.attr('recipe-id')
   recipe = recipes.find (recipe) ->
     recipe.get('id') == id
 
@@ -207,6 +191,27 @@ initEatListHandler = (jsonEatList) ->
 
   recipe.addToShoppingList() for recipe in eatListRecipes
 
+#############################################################################
+### MISC LISTENERS
+#############################################################################
+
+$('#searchForm').on('change', 'input[name=servings]', ->
+  selected = $.trim($(@).parent('label').text())
+  $('button[data-target=#servingSelector]').text(selected)
+  $('#servingSelector').collapse('hide')
+)
+
+$('.navbar-collapse').on('click', 'a[data-toggle=tab]', ->
+  $(@).parents('.navbar-collapse').removeClass('in').addClass('collapse')
+)
+
+$('#searchResults').parent('.carousel').swipe(
+  swipe: (event, direction, distance, duration, fingerCount) ->
+    switch direction
+      when 'left' then $(this).carousel('next')
+      when 'right' then $(this).carousel('prev')
+  tap: recipeClickHandler
+)
 
 #############################################################################
 ### ON LOAD
@@ -259,7 +264,6 @@ $ ->
     searchResultsBox.html('')
     searchResultsBox.append renderedResult for renderedResult in renderedResults
     $('#searchResults .item:first').addClass 'active'
-    searchResultsBox.children().click recipeClickHandler
 
     # show the carousel div and rebind
     carousel = $('#searchResults').parent('.carousel')
