@@ -87,29 +87,31 @@
           </div>
         </div>
 
-        <div>
+        <div id="eatList">
           <div class="page-header">
             <h1>Shopping List</h1>
           </div>
-          <h2>Spaghetti Bolognese</h2>
-          <ul>
-            <li>
-              <h3>Spaghetti</h3>
-              150g - $5.00
-            </li>
-            <li>
-              <h3>Tomatoes</h3>
-              350ml - $3.85
-            </li>
-            <li>
-              <h3>Ground Beef</h3>
-              700g - $12.10
-            </li>
-            <li>
-              <h3>Basil</h3>
-              15g - $1.34
-            </li>
-          </ul>
+          <div class="eatListRecipe">
+            <h2>Spaghetti Bolognese</h2>
+            <ul>
+              <li>
+                <h3>Spaghetti</h3>
+                150g - $5.00
+              </li>
+              <li>
+                <h3>Tomatoes</h3>
+                350ml - $3.85
+              </li>
+              <li>
+                <h3>Ground Beef</h3>
+                700g - $12.10
+              </li>
+              <li>
+                <h3>Basil</h3>
+                15g - $1.34
+              </li>
+            </ul>
+          </div>
         </div>
 
       </div><!-- /.container -->
@@ -135,7 +137,7 @@
     </script>
 
     <script type="text/template" id="searchResultTemplate">
-      <div class="item">
+      <div class="item" recipe-id="<%= id %>">
         <img src="<%= imageUrl %>" alt="<%= name %>" />
         <div class="carousel-caption">
           <h3><%= name %></h3>
@@ -145,7 +147,7 @@
     </script>
 
     <script type="text/template" id="historyRecipeTemplate">
-      <li class="row">
+      <li class="row" recipe-id="<%= id %>">
         <div class="col-md-8 col-xs-12">
           <header>
             <h2><%= name %></h2>
@@ -158,6 +160,18 @@
         <div class="col-md-4 col-xs-12">
           <img src="<%= imageUrl %>" class="pull-right" />
         </div>
+      </li>
+    </script>
+    <script type="text/template" id="eatListRecipeTemplate">
+      <div class="eatListRecipe">
+        <h2>Spaghetti Bolognese</h2>
+        <ul></ul>
+      </div>
+    </script>
+    <script type="text/template" id="eatListIngredientTemplate">
+      <li class="eatListIngredient">
+        <h3>Basil</h3>
+        15g - $1.34
       </li>
     </script>
 
