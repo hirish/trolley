@@ -22,7 +22,11 @@ db = Mysql2::Client.new(
   database: DB_NAME
 )
 
+print "Importing"
+
 recipes.each do |recipe|
+  print "."
+
   serves = recipe["serves"].is_a?(Array) ? recipe["serves"].max : recipe["serves"]
 
   recipe_query = "INSERT INTO recipe (title, description, url, image, serves, prep_time, cook_time, rating) VALUES (\"#{db.escape(recipe['title'])}\", \"#{db.escape(recipe['description'])}\", \"#{recipe['url']}\", \"#{recipe['image']}\", #{serves}, \"#{recipe['prep_time']}\", \"#{recipe['cook_time']}\", #{recipe['rating']})"
@@ -32,10 +36,10 @@ recipes.each do |recipe|
 
   recipe_id = db.last_id
 
-  ingredients_query = "INSERT INTO ingredient (recipe_id, name, type, quantity, price)"
+  ingredients_query = "INSERT INTO ingredient (recipe_id, name, type, quantity, price) VALUES "
 
-  recipe["ingredients"].each do |ingredient|
-    ingredients_query += "(#{recipe_id}, \'#{db.escape(ingredient['name'])}\", \"#{ingredient['type']}\", #{ingredient['quantity']}, #{ingredient['price']})"
+  recipe["ingredients"].each do |index, ingredient|
+    ingredients_query << "(#{recipe_id}, \"#{db.escape(ingredient['name'])}\", \"#{ingredient['type']}\", #{ingredient['quantity'] || 'NULL'}, #{ingredient['price'] || 'NULL'}),"
   end
 
   # add ingredients
