@@ -119,6 +119,11 @@ getIngredientsForRecipe = (recipe) ->
   data = $.parseJSON(response.responseText).results
   (createIngredientFromJSON ingredientJSON for ingredientJSON in data)
 
+initEatListFromServer = ->
+  $.ajax '/1/eatlist',
+    success: initEatListHandler
+    error: errorHandler
+
 #############################################################################
 ### CLICK HANDLERS
 #############################################################################
@@ -186,7 +191,7 @@ submitHandler = (e) ->
     eatListBox.html('')
 
     cancelHandler()
-    
+
     $('#submitIcon').removeClass('glyphicon-ok')
     $('#submitIcon').addClass('glyphicon-upload')
 
@@ -195,6 +200,13 @@ submitHandler = (e) ->
 
   setTimeout(done, 500)
   setTimeout(reset, 1000)
+
+initEatListHandler = (jsonEatList) ->
+  eatList = $.parseJSON(jsonEatList).results
+  eatListRecipes = (createRecipeFromJSON result for result in eatList)
+
+  recipe.addToShoppingList() for recipe in eatListRecipes
+
 
 #############################################################################
 ### ON LOAD
