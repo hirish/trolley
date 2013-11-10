@@ -1,9 +1,13 @@
+#############################################################################
+### MODELS
+#############################################################################
+
 Ingredient = Backbone.Model.extend
   defaults:
     id: 0
     name: null
-    amount: 0
-    isVolume: false
+    quantity: 0
+    type: "weight"
 
 Ingredients = Backbone.Collection.extend
   model: Ingredient
@@ -19,6 +23,14 @@ Recipe = Backbone.Model.extend
     isStarred: false
     rating: 0
     description: "This is a description"
+
+  initialize: ->
+    $.ajax "/recipe/#{@.get('id')}/ingredients",
+      success: (response) =>
+        data = $.parseJSON(response).results
+        ingredients = (createIngredientFromJSON ingredientJSON for ingredientJSON in data)
+        @.set('ingredients', ingredients)
+        console.log @.get('ingredients')
 
   attributeObject: ->
     return {
@@ -45,81 +57,59 @@ hideKeyboard = ->
   $("input").blur()
 
 $('#searchForm').on('change', 'input[name=servings]', ->
-  selected = $.trim($(this).parent('label').text())
+  selected = $.trim($(@).parent('label').text())
   $('button[data-target=#servingSelector]').text(selected)
   $('#servingSelector').collapse('hide')
 )
 
-selected = '#eat-now'
-switchTab = (e) ->
-  $('.navbar-collapse').collapse('hide')
-  $(@).tab('show')
-  $(selected).hide()
+$('.navbar-collapse').on('click', 'a[data-toggle=tab]', ->
+  $(@).parents('.navbar-collapse').removeClass('in').addClass('collapse')
+)
 
-  selected = $(@).attr('href')
-  $(selected).fadeIn(150)
+$('#searchResults').parent('.carousel').swipe(
+  swipe: (event, direction, distance, duration, fingerCount) ->
+    switch direction
+      when 'left' then $(this).carousel('next')
+      when 'right' then $(this).carousel('prev')
+)
+
+#############################################################################
+### UTILITY FUNCTIONS
+#############################################################################
+
+createRecipeFromJSON = (jsonRecipe) ->
+  new Recipe
+    url: jsonRecipe.url
+    rating: jsonRecipe.rating
+    imageUrl: jsonRecipe.imageUrl
+    isStarred: jsonRecipe.isStarred
+    name: jsonRecipe.name
+    id: 1
+    description: "This description should be changed"
+
+createIngredientFromJSON = (jsonIngredient) ->
+  new Ingredient
+    name: jsonIngredient.name
+    type: jsonIngredient.type
+    quantity: jsonIngredient.quantity
+
+#############################################################################
+### ON LOAD
+#############################################################################
 
 $ ->
-  $('#tab-switch li a').click switchTab
-
   window.userId = userId = 1
-  pasta = new Ingredient
-    id: 1
-    name: "Spaghetti"
-    amount: 150
-    isVolume: false
-  bologneseIngredients = new Ingredients [pasta]
-
-  curry = new Recipe
-      id: 1
-      name: "Curry"
-      imageUrl: "http://d1jrw5jterzxwu.cloudfront.net/sites/default/files/article_media/curry.jpg"
-      ingredients: bologneseIngredients
-      servingSize: 2
-      isStarred: false
-      rating: 5
-      description: "I really like curry."
-
-  bolognese = new Recipe
-      id: 1
-      name: "Spaghetti Bolognese"
-      imageUrl: "http://upload.wikimedia.org/wikipedia/commons/e/e5/Heston_Blumenthal's_Perfect_Spaghetti_Bolognese.jpg"
-      ingredients: bologneseIngredients
-      servingSize: 2
-      isStarred: false
-      rating: 5
-      description: "This is a really delicious bolognese sauce made with the finest truffles."
-
-  myBolognese = new EatListRecipe
-    baseRecipe: bolognese
-    ingredients: bolognese.get('ingredients')
-  anotherBolognese = new EatListRecipe
-    baseRecipe: bolognese
-    ingredients: bolognese.get('ingredients')
-  finalBolognese = new EatListRecipe
-    baseRecipe: bolognese
-    ingredients: bolognese.get('ingredients')
-
-  eatlist = [myBolognese, anotherBolognese, finalBolognese]
 
   searchBox = $('#search')
   searchResultsBox = $('#searchResults')
   historyRecipesBox = $('#historyResults')
+  starredRecipesBox = $('#starredResults')
   errorBox = $('#error')
 
   errorTemplate = $('#errorTemplate').html()
   searchResultTemplate = $('#searchResultTemplate').html()
   historyRecipeTemplate = $('#historyRecipeTemplate').html()
-
-  createRecipeFromJSON = (jsonRecipe) ->
-    new Recipe
-      url: jsonRecipe.url
-      rating: jsonRecipe.rating
-      imageUrl: jsonRecipe.imageUrl
-      isStarred: jsonRecipe.isStarred
-      name: jsonRecipe.name
-      id: 1
-      description: "This description should be changed"
+  starredRecipeTemplate = $('#historyRecipeTemplate').html()
 
   #############################################################################
   ### SEARCH
@@ -169,10 +159,8 @@ $ ->
 
   historyHandler = (jsonHistory) ->
     # Parse JSON History into recipe objects
-    # history = $.parseJSON jsonHistory.results
-    # history = [history]
-    # historyRecipes (createRecipeFromJSON result for result in history)
-    historyRecipes = [bolognese, curry]
+    history = $.parseJSON(jsonHistory).results
+    historyRecipes = (createRecipeFromJSON result for result in history)
 
     # Render recipes
     renderedHistoryRecipes = (renderRecipe historyRecipeTemplate, recipe for recipe in historyRecipes)
@@ -180,10 +168,26 @@ $ ->
     historyRecipesBox.html('')
     historyRecipesBox.append renderedRecipe for renderedRecipe in renderedHistoryRecipes
 
+  #############################################################################
+  ### STARRED
+  #############################################################################
 
-  renderHistoryRecipe = (result) ->
-    return true
-    #_.tempalte
+  loadStarred = ->
+    console.log "Loading Starred..."
+    $.ajax "/#{userId}/star",
+      success: starredHandler
+      error: errorHandler
+
+  starredHandler = (jsonStarred) ->
+    # Parse JSON Starred into recipe objects
+    starred = $.parseJSON(jsonStarred).results
+    starredRecipes = (createRecipeFromJSON result for result in starred)
+
+    # Render recipes
+    renderedStarredRecipes = (renderRecipe starredRecipeTemplate, recipe for recipe in starredRecipes)
+
+    starredRecipesBox.html('')
+    starredRecipesBox.append renderedRecipe for renderedRecipe in renderedStarredRecipes
 
   #############################################################################
   ### ERROR HANDLING
@@ -195,3 +199,4 @@ $ ->
 
   searchBox.change throttledSearch
   loadHistory()
+  loadStarred()
