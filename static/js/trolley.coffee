@@ -50,6 +50,13 @@ $('#searchForm').on('change', 'input[name=servings]', ->
   $('#servingSelector').collapse('hide')
 )
 
+$('#searchResults').parent('.carousel').swipe(
+  swipe: (event, direction, distance, duration, fingerCount) ->
+    switch direction
+      when 'left' then $(this).carousel('next')
+      when 'right' then $(this).carousel('prev')
+)
+
 selected = '#eat-now'
 switchTab = (e) ->
   $('.navbar-collapse').collapse('hide')
