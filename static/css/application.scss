@@ -116,6 +116,8 @@ h1, h2, h3, h4, h5, h6, legend {
       border-bottom: 1px solid #ddd;
       color: #777;
       overflow: hidden;
+      position: relative;
+      padding-left: 0.5em;
       
       h4, p, .close {
         line-height: 1em;
@@ -123,8 +125,11 @@ h1, h2, h3, h4, h5, h6, legend {
       }
 
       .close {
-        float: left;
-        margin-right: 0.5em;
+        position: absolute;
+        top: 0; left: 0;
+      }
+      h4 {
+        padding-left: 0.5em;
       }
     }
   }
