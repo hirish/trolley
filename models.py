@@ -29,6 +29,7 @@ class Recipe(db.Model):
     eatlist = db.relationship('Eatlist',
                                 backref='recipe',
                                 foreign_keys='Eatlist.recipe_id')
+    star = db.Column(db.Boolean)
 
     def __init__(self, title, url, image):
         self.title = title

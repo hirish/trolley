@@ -60,11 +60,30 @@ def star(user):
     starred_recipes = []
     if request.method == 'POST':
         recipe = request.args.get('recipe')
-        #recipe.star()
-        starred_recipes.append(recipe) # get all starred recipes
-    # return json.dumps({'star': starred_recipes})
-    # return json.dumps({'results': [get_recipe(0), get_recipe(3), get_recipe(4)]})
-    return '{"results": [{"url": "http://www.google.com", "rating": 0, "imageUrl": "http://www.jonathanmalm.com/wp-content/uploads/2011/01/beautiful-food.jpg", "isStarred": false, "name": "Spaghetti Bolognese"}, {"url": "http://www.google.com", "rating": 4, "imageUrl": "http://i.telegraph.co.uk/multimedia/archive/00793/Spaghe-Bolog_793727c.jpg", "isStarred": false, "name": "Veggie Spaghetti Bolognese"}, {"url": "http://www.google.com", "rating": 5, "imageUrl": "http://www.jonathanmalm.com/wp-content/uploads/2011/01/beautiful-food.jpg", "isStarred": true, "name": "Simple Bolognese"}]}'
+        recipe = Recipe.query.get(recipe)
+        if recipe.star:
+            recipe.star = False
+        else:
+            recipe.star = True
+        db.session.add(recipe)
+        db.session.commmit()
+    recipes = Recipe.query.filter_by(star=True)
+    to_return = []
+    for r in recipes:
+        result_dict = {
+            'id' : r.id,
+            'name': r.title,
+            'description': r.description,
+            'url': r.url,
+            'imageUrl': r.image,
+            'serves': r.serves,
+            'rating': r.rating,
+            'prep_time': r.prep_time,
+            'cook_time': r.cook_time
+        }
+        to_return.append(result_dict)
+    return json.dumps({'results': to_return})
+    #return '{"results": [{"url": "http://www.google.com", "rating": 0, "imageUrl": "http://www.jonathanmalm.com/wp-content/uploads/2011/01/beautiful-food.jpg", "isStarred": false, "name": "Spaghetti Bolognese"}, {"url": "http://www.google.com", "rating": 4, "imageUrl": "http://i.telegraph.co.uk/multimedia/archive/00793/Spaghe-Bolog_793727c.jpg", "isStarred": false, "name": "Veggie Spaghetti Bolognese"}, {"url": "http://www.google.com", "rating": 5, "imageUrl": "http://www.jonathanmalm.com/wp-content/uploads/2011/01/beautiful-food.jpg", "isStarred": true, "name": "Simple Bolognese"}]}'
 
 @application.route('/<user>/eatlist', methods=['GET','POST'])
 def eatlist(user):
