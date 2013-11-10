@@ -2,7 +2,7 @@
 from flask import Flask, request
 import config
 import json
-from models import Recipe
+from models import Recipe, Eatlist, db
 from utils import get_recipe
 
 application = config.application
@@ -39,8 +39,19 @@ def recipe(recipe):
     if request.method == 'POST':
         #fb.post('/recipe',
         print 'POST'
-    recipe = get_recipe(recipe) 
-    return json.dumps(recipe)
+    r = Recipe.query.get(recipe) 
+    recipe_dict = {
+        'id' : r.id,
+        'name': r.title,
+        'description': r.description,
+        'url': r.url,
+        'imageUrl': r.image,
+        'serves': r.serves,
+        'rating': r.rating,
+        'prep_time': r.prep_time,
+        'cook_time': r.cook_time
+    }
+    return json.dumps({'recipe': recipe_dict})
 
 @application.route('/recipe/<recipe>/ingredients', methods=['GET'])
 def ingredients(recipe):
@@ -86,14 +97,23 @@ def star(user):
     return json.dumps({'results': to_return})
     #return '{"results": [{"url": "http://www.google.com", "rating": 0, "imageUrl": "http://www.jonathanmalm.com/wp-content/uploads/2011/01/beautiful-food.jpg", "isStarred": false, "name": "Spaghetti Bolognese"}, {"url": "http://www.google.com", "rating": 4, "imageUrl": "http://i.telegraph.co.uk/multimedia/archive/00793/Spaghe-Bolog_793727c.jpg", "isStarred": false, "name": "Veggie Spaghetti Bolognese"}, {"url": "http://www.google.com", "rating": 5, "imageUrl": "http://www.jonathanmalm.com/wp-content/uploads/2011/01/beautiful-food.jpg", "isStarred": true, "name": "Simple Bolognese"}]}'
 
-@application.route('/<user>/eatlist', methods=['GET','POST'])
+@application.route('/<user>/eatlist')
 def eatlist(user):
-    eatlist = []
-    if request.method == 'POST':
-        recipe = request.args.get('recipe')
-        # eatlist.add(recipe)
-        eatlist.append(recipe)
-    return json.dumps({'eatlist': eatlist})
+    eatlist = Eatlist.query.filter_by(user_id=user).all()
+    to_return = []
+    for e in eatlist:
+         to_return.append(recipe(e.recipe_id))
+    return json.dumps({'eatlist': to_return})
+
+@application.route('/<user>/eatlist/<recipe>')
+def add_eatlist(user, recipe):
+    print recipe
+    e = Eatlist(user,int(recipe))
+    db.session.add(e)
+    db.session.commit()
+    return eatlist(user)
+
+
 
 @application.route('/<user>/buy')
 def buy(user):
