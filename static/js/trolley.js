@@ -135,7 +135,7 @@ $(function() {
     });
   };
   throttledSearch = _.throttle(search, 250);
-  renderRecipe = function(recipe, template) {
+  renderRecipe = function(template, recipe) {
     return _.template(template, recipe.attributeObject());
   };
   searchResultHandler = function(jsonResults) {

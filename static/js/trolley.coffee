@@ -124,7 +124,7 @@ $ ->
   # Prevent search being called too frequently; this is a mobile app!
   throttledSearch = _.throttle search, 250
 
-  renderRecipe = (recipe, template) ->
+  renderRecipe = (template, recipe) ->
     _.template template, recipe.attributeObject()
 
   searchResultHandler = (jsonResults) ->
