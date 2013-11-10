@@ -14,6 +14,9 @@
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
 
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600">
+
     <!-- Application CSS -->
     <link rel="stylesheet" href="/css/application.css">
 
@@ -85,13 +88,17 @@
       </div><!-- /.container -->
 
       <div id="history" class="container tab-pane">
-        History
-        <div id="historyResults"></div>
+        <div class="page-header">
+          <h1>History</h1>
+        </div>
+        <ol id="historyResults"></ol>
       </div><!-- /.container -->
 
       <div id="starred" class="container tab-pane">
-        Starred
-        <div id="starredResults"></div>
+        <div class="page-header">
+          <h1>Starred</h1>
+        </div>
+        <ol id="starredResults"></ol>
       </div><!-- /.container -->
 
     </div><!-- /.tab-content -->
@@ -111,12 +118,20 @@
     </script>
 
     <script type="text/template" id="historyRecipeTemplate">
-      <div>
-        <strong><%= name %></strong><br />
-        <img src="<%= imageUrl %>" width="50" height="50" />
-        <%= description %><br />
-        <% for(var i = 0; i < rating; i++){ %><span class="glyphicon glyphicon-star"></span><% } %><% for(var i = 0; i < 5 - rating; i++){ %><span class="glyphicon glyphicon-star-empty"></span><% } %>
-      </div>
+      <li class="row">
+        <div class="col-md-8 col-xs-12">
+          <header>
+            <h2><%= name %></h2>
+            <div class="rating"><% for(var i = 0; i < rating; i++){ %><span class="glyphicon glyphicon-star"></span><% } %><% for(var i = 0; i < 5 - rating; i++){ %><span class="glyphicon glyphicon-star-empty"></span><% } %></div>
+          </header>
+          <section>
+            <p><%= description %></p>
+          </section>
+        </div>
+        <div class="col-md-4 col-xs-12">
+          <img src="<%= imageUrl %>" class="pull-right" />
+        </div>
+      </li>
     </script>
 
     <!-- Bootstrap core JavaScript
