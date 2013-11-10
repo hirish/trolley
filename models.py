@@ -70,6 +70,3 @@ class Eatlist(db.Model):
 
     def __repr__(self):
         return '<Eatlist - ({},{})>'.format(str(self.user.id), str(self.recipe.id))
-
-from application import app
-whooshalchemy.whoosh_index(app, Recipe)
