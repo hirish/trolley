@@ -14,7 +14,7 @@ def index():
 
 @app.route('/<user>/search')
 def search(user):
-    query = request.args.get('q')
+    query = request.args.get('q').lower()
     results = []
     if query == 'spag bol':
         results.append(get_recipe(0))
