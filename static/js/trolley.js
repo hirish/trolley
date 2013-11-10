@@ -54,6 +54,9 @@ $('#searchForm').on('change', 'input[name=servings]', function() {
 selected = '#eat-now';
 
 switchTab = function(e) {
+  if (window.innerWidth < 800) {
+    $('.navbar-toggle').click();
+  }
   $(this).tab('show');
   $(selected).hide();
   selected = $(this).attr('href');

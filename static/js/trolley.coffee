@@ -40,6 +40,8 @@ $('#searchForm').on('change', 'input[name=servings]', ->
 
 selected = '#eat-now'
 switchTab = (e) ->
+  if window.innerWidth < 800
+    $('.navbar-toggle').click()
   $(@).tab('show')
   $(selected).hide()
 
