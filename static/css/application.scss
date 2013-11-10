@@ -188,3 +188,26 @@ h1, h2, h3, h4, h5, h6, legend {
     border: 0;
   }
 }
+
+.tab-content{
+  position: relative;
+
+  .tab-pane {
+    background-color: white;
+    position: absolute;
+    transition: 1s;
+    left: -100%;
+    display: block !important;
+    width: 100%;
+  
+  }
+
+  .tab-pane.goRight{
+    left: 100%;
+  }
+
+  .tab-pane.active{
+    left: 0% !important;
+  }
+
+}

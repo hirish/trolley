@@ -321,3 +321,16 @@ $ ->
   $('#buy').click buyHandler
   $('#cancel').click cancelHandler
   $('#submit').click submitHandler
+
+  $('a[data-toggle="tab"]').on 'shown.bs.tab', (e) ->
+    curr = $ e.target
+    # prev = $ e.relatedTarget
+    currH = curr.attr('href')
+    console.log currH
+    # prevH = curr.attr('href')
+
+    currTab = $(curr.attr('href'))
+    # prevTab = $(prev.attr('href'))
+
+    e.preventDefault()
+

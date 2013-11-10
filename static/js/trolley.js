@@ -441,5 +441,13 @@ $(function() {
   loadStarred();
   $('#buy').click(buyHandler);
   $('#cancel').click(cancelHandler);
-  return $('#submit').click(submitHandler);
+  $('#submit').click(submitHandler);
+  return $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+    var curr, currH, currTab;
+    curr = $(e.target);
+    currH = curr.attr('href');
+    console.log(currH);
+    currTab = $(curr.attr('href'));
+    return e.preventDefault();
+  });
 });

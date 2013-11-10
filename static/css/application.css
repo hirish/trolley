@@ -119,3 +119,17 @@ h1, h2, h3, h4, h5, h6, legend {
     color: #fff;
     background: #fe6e7e;
     border: 0; }
+
+.tab-content {
+  position: relative; }
+  .tab-content .tab-pane {
+    background-color: white;
+    position: absolute;
+    transition: 1s;
+    left: -100%;
+    display: block !important;
+    width: 100%; }
+  .tab-content .tab-pane.goRight {
+    left: 100%; }
+  .tab-content .tab-pane.active {
+    left: 0% !important; }
