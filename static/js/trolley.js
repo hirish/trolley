@@ -2,7 +2,7 @@
 /* MODELS
 */
 
-var EatList, EatListRecipe, Ingredient, Ingredients, Recipe, Recipes, addedToEatListHandler, buyHandler, cancelHandler, createIngredientFromJSON, createRecipeFromJSON, getIngredientsForRecipe, hideKeyboard, recipeClickHandler;
+var EatList, EatListRecipe, Ingredient, Ingredients, Recipe, Recipes, addedToEatListHandler, buyHandler, cancelHandler, createIngredientFromJSON, createRecipeFromJSON, getIngredientsForRecipe, hideKeyboard, recipeClickHandler, submitHandler;
 
 Ingredient = Backbone.Model.extend({
   defaults: {
@@ -231,6 +231,31 @@ cancelHandler = function(e) {
   return setTimeout(x, 350);
 };
 
+submitHandler = function(e) {
+  var done, reset;
+  $('#submitIcon').removeClass('glyphicon-cutlery');
+  $('#submitIcon').addClass('glyphicon-upload');
+  done = function() {
+    $('#submitIcon').removeClass('glyphicon-upload');
+    $('#submitIcon').addClass('glyphicon-ok');
+    $('#submitIcon').parent().removeClass('btn-primary');
+    return $('#submitIcon').parent().addClass('btn-success');
+  };
+  reset = function() {
+    var eatList, eatListBox;
+    eatList = new EatList;
+    eatListBox = $('#eatList');
+    eatListBox.html('');
+    cancelHandler();
+    $('#submitIcon').removeClass('glyphicon-ok');
+    $('#submitIcon').addClass('glyphicon-upload');
+    $('#submitIcon').parent().removeClass('btn-success');
+    return $('#submitIcon').parent().addClass('btn-primary');
+  };
+  setTimeout(done, 500);
+  return setTimeout(reset, 1000);
+};
+
 /* ON LOAD
 */
 
@@ -388,5 +413,6 @@ $(function() {
   loadHistory();
   loadStarred();
   $('#buy').click(buyHandler);
-  return $('#cancel').click(cancelHandler);
+  $('#cancel').click(cancelHandler);
+  return $('#submit').click(submitHandler);
 });
