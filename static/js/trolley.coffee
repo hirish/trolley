@@ -70,44 +70,6 @@ $ ->
   $('#tab-switch li a').click switchTab
 
   window.userId = userId = 1
-  pasta = new Ingredient
-    id: 1
-    name: "Spaghetti"
-    amount: 150
-    isVolume: false
-  bologneseIngredients = new Ingredients [pasta]
-
-  curry = new Recipe
-      id: 1
-      name: "Curry"
-      imageUrl: "http://d1jrw5jterzxwu.cloudfront.net/sites/default/files/article_media/curry.jpg"
-      ingredients: bologneseIngredients
-      servingSize: 2
-      isStarred: false
-      rating: 5
-      description: "I really like curry."
-
-  bolognese = new Recipe
-      id: 1
-      name: "Spaghetti Bolognese"
-      imageUrl: "http://upload.wikimedia.org/wikipedia/commons/e/e5/Heston_Blumenthal's_Perfect_Spaghetti_Bolognese.jpg"
-      ingredients: bologneseIngredients
-      servingSize: 2
-      isStarred: false
-      rating: 5
-      description: "This is a really delicious bolognese sauce made with the finest truffles."
-
-  myBolognese = new EatListRecipe
-    baseRecipe: bolognese
-    ingredients: bolognese.get('ingredients')
-  anotherBolognese = new EatListRecipe
-    baseRecipe: bolognese
-    ingredients: bolognese.get('ingredients')
-  finalBolognese = new EatListRecipe
-    baseRecipe: bolognese
-    ingredients: bolognese.get('ingredients')
-
-  eatlist = [myBolognese, anotherBolognese, finalBolognese]
 
   searchBox = $('#search')
   searchResultsBox = $('#searchResults')
