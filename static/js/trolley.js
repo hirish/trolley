@@ -134,7 +134,7 @@ $(function() {
     });
   };
   searchResultHandler = function(jsonResults) {
-    var recipeResult, recipeResults, renderedResult, renderedResults, result, results, _i, _len, _results;
+    var recipeResult, recipeResults, renderedResult, renderedResults, result, results, _i, _len;
     results = $.parseJSON(jsonResults).results;
     results = [results, results, results];
     recipeResults = (function() {
@@ -156,12 +156,11 @@ $(function() {
       return _results;
     })();
     searchResultsBox.html('');
-    _results = [];
     for (_i = 0, _len = renderedResults.length; _i < _len; _i++) {
       renderedResult = renderedResults[_i];
-      _results.push(searchResultsBox.append(renderedResult));
+      searchResultsBox.append(renderedResult);
     }
-    return _results;
+    return $('#searchResults .item:first').addClass('active');
   };
   /* HISTORY
   */

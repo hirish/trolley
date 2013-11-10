@@ -134,6 +134,7 @@ $ ->
     # Add rendered results to the search results
     searchResultsBox.html('')
     searchResultsBox.append renderedResult for renderedResult in renderedResults
+    $('#searchResults .item:first').addClass 'active'
 
   #############################################################################
   ### HISTORY
