@@ -140,6 +140,7 @@ $ ->
   searchResultHandler = (jsonResults) ->
     console.log "Returned"
     console.log jsonResults
+
     # Turn JSON recipes into recipe objects
     results = $.parseJSON(jsonResults).results
     recipeResults = (createRecipeFromJSON result for result in results)
@@ -153,7 +154,8 @@ $ ->
     $('#searchResults .item:first').addClass 'active'
 
     # show the carousel div and rebind
-    $('#searchResults').parent('.carousel').removeClass('hidden').carousel()
+    carousel = $('#searchResults').parent('.carousel')
+    carousel.removeClass('hidden').carousel() if results.length > 0
 
   #############################################################################
   ### HISTORY
