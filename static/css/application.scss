@@ -104,7 +104,6 @@ h1, h2, h3, h4, h5, h6, legend {
 }
 
 .eatListRecipe {
-
   h2 {
     margin-bottom: 1em;
   }
@@ -181,12 +180,35 @@ h1, h2, h3, h4, h5, h6, legend {
 
 .btn {
   text-transform: uppercase;
+  border-radius: 0;
+  border: 0;
 
   &.btn-primary {
     color: #fff;
     background: #fe6e7e;
-    border: 0;
   }
+
+  &.btn-default {
+    background: #ddd;  
+  }
+
+  .glyphicon {
+    font-size: 0.9em;
+    margin-right: 5px;
+  }
+}
+
+.btn-group {
+  margin: 1em 0;
+
+  .btn {
+    margin-right: 0.5em;
+    border-radius: inherit;
+  }
+}
+
+form#confirmation .btn-group {
+  display: block;
 }
 
 .flash {

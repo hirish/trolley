@@ -137,10 +137,8 @@
           </div>
         </div>
 
-        <div class="row">
-          <div class="col-xs-12">
-            <button id="buy" class="btn btn-primary">Buy</button>
-          </div>
+        <div class="row btn-group">
+          <button id="buy" class="btn btn-primary">Buy All</button>
         </div>
 
       </div><!-- /.container -->
@@ -162,13 +160,19 @@
     </div><!-- /.tab-content -->
 
     <div class="hideBg fade" style="display: none;">
-      <div id="confirmation" class="fade">
-        <h3>You are buying 3 recipes for $18</h3>
-        <button id='submit' class="btn btn-primary btn-md">
-          <span id="submitIcon" class="glyphicon glyphicon-upload"></span> Let's go!
-        </button>
-        <button id='cancel' class="btn btn-default btn-md">Cancel</button>
-      </div>
+      <form id="confirmation" class="fade form-inline">
+        <h3>You are buying <strong>3 recipes</strong> for $18</h3>
+        <div class="form-group">
+          <label for="deliver">Bring it on</label>
+          <input id="deliver" name="deliver" type="date" class="form-control" />
+        </div>
+        <div class="form-group btn-group">
+          <button id='submit' class="btn btn-primary btn-md">
+            <span id="submitIcon" class="glyphicon glyphicon-shopping-cart"></span> Let's go!
+          </button>
+          <button id='cancel' class="btn btn-default btn-md">Cancel</button>
+        </div>
+      </form>
     </div>
 
     <script type="text/template" id="errorTemplate">

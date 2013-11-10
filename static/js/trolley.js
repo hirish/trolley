@@ -2,7 +2,7 @@
 /* MODELS
 */
 
-var EatList, EatListRecipe, Ingredient, Ingredients, Recipe, Recipes, addedToEatListHandler, buyHandler, cancelHandler, createIngredientFromJSON, createRecipeFromJSON, flash, getIngredientsForRecipe, hideKeyboard, initEatListFromServer, initEatListHandler, recipeClickHandler, submitHandler;
+var EatList, EatListRecipe, Ingredient, Ingredients, Recipe, Recipes, addedToEatListHandler, buyHandler, cancelHandler, createIngredientFromJSON, createRecipeFromJSON, getIngredientsForRecipe, hideKeyboard, initEatListFromServer, initEatListHandler, recipeClickHandler, submitHandler;
 
 Ingredient = Backbone.Model.extend({
   defaults: {
@@ -97,28 +97,6 @@ hideKeyboard = function() {
   return $("input").blur();
 };
 
-$('#searchForm').on('change', 'input[name=servings]', function() {
-  var selected;
-  selected = $.trim($(this).parent('label').text());
-  $('button[data-target=#servingSelector]').text(selected);
-  return $('#servingSelector').collapse('hide');
-});
-
-$('.navbar-collapse').on('click', 'a[data-toggle=tab]', function() {
-  return $(this).parents('.navbar-collapse').removeClass('in').addClass('collapse');
-});
-
-$('#searchResults').parent('.carousel').swipe({
-  swipe: function(event, direction, distance, duration, fingerCount) {
-    switch (direction) {
-      case 'left':
-        return $(this).carousel('next');
-      case 'right':
-        return $(this).carousel('prev');
-    }
-  }
-});
-
 /* UTILITY FUNCTIONS
 */
 
@@ -178,9 +156,10 @@ initEatListFromServer = function() {
 */
 
 
-recipeClickHandler = function(e) {
-  var id, recipe;
-  id = parseInt($(this).attr('recipe-id'));
+recipeClickHandler = function(e, t) {
+  var id, item, recipe;
+  item = $(this).is('.carousel') ? $('.active', this) : $(this);
+  id = parseInt(item.attr('recipe-id'));
   recipe = recipes.find(function(recipe) {
     return recipe.get('id') === id;
   });
@@ -241,9 +220,9 @@ cancelHandler = function(e) {
 submitHandler = function(e) {
   var done, reset;
   $('#submitIcon').removeClass('glyphicon-cutlery');
-  $('#submitIcon').addClass('glyphicon-upload');
+  $('#submitIcon').addClass('glyphicon-shopping-cart');
   done = function() {
-    $('#submitIcon').removeClass('glyphicon-upload');
+    $('#submitIcon').removeClass('glyphicon-shopping-cart');
     $('#submitIcon').addClass('glyphicon-ok');
     $('#submitIcon').parent().removeClass('btn-primary');
     return $('#submitIcon').parent().addClass('btn-success');
@@ -283,14 +262,32 @@ initEatListHandler = function(jsonEatList) {
   return _results;
 };
 
-flash = function(element) {
-  var x;
-  element.addClass('flash');
-  x = function() {
-    return element.removeClass('flash');
-  };
-  return setTimeout(x, 200);
-};
+/* MISC LISTENERS
+*/
+
+
+$('#searchForm').on('change', 'input[name=servings]', function() {
+  var selected;
+  selected = $.trim($(this).parent('label').text());
+  $('button[data-target=#servingSelector]').text(selected);
+  return $('#servingSelector').collapse('hide');
+});
+
+$('.navbar-collapse').on('click', 'a[data-toggle=tab]', function() {
+  return $(this).parents('.navbar-collapse').removeClass('in').addClass('collapse');
+});
+
+$('#searchResults').parent('.carousel').swipe({
+  swipe: function(event, direction, distance, duration, fingerCount) {
+    switch (direction) {
+      case 'left':
+        return $(this).carousel('next');
+      case 'right':
+        return $(this).carousel('prev');
+    }
+  },
+  tap: recipeClickHandler
+});
 
 /* ON LOAD
 */
@@ -310,6 +307,7 @@ $(function() {
   searchResultTemplate = $('#searchResultTemplate').html();
   historyRecipeTemplate = $('#historyRecipeTemplate').html();
   starredRecipeTemplate = $('#historyRecipeTemplate').html();
+  $('input[type=date]').get(0).valueAsDate = new Date();
   /* SEARCH
   */
 
@@ -352,7 +350,6 @@ $(function() {
       searchResultsBox.append(renderedResult);
     }
     $('#searchResults .item:first').addClass('active');
-    searchResultsBox.children().click(recipeClickHandler);
     carousel = $('#searchResults').parent('.carousel');
     if (results.length > 0) {
       return carousel.removeClass('hidden').carousel();

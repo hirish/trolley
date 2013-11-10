@@ -114,12 +114,23 @@ h1, h2, h3, h4, h5, h6, legend {
   overflow: hidden; }
 
 .btn {
-  text-transform: uppercase; }
+  text-transform: uppercase;
+  border-radius: 0;
+  border: 0; }
   .btn.btn-primary {
     color: #fff;
-    background: #fe6e7e;
-    border: 0; }
+    background: #fe6e7e; }
+  .btn.btn-default {
+    background: #ddd; }
+  .btn .glyphicon {
+    font-size: 0.9em;
+    margin-right: 5px; }
 
-.flash {
-  transition: 0.3s;
-  background-color: #ffc !important; }
+.btn-group {
+  margin: 1em 0; }
+  .btn-group .btn {
+    margin-right: 0.5em;
+    border-radius: inherit; }
+
+form#confirmation .btn-group {
+  display: block; }

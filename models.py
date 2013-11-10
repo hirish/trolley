@@ -62,8 +62,14 @@ class Eatlist(db.Model):
     date_last_bought = db.Column(db.DateTime)
 
     def __init__(self, user, recipe):
-        self.user = user
-        self.recipe = recipe
+        if isinstance( user, User):
+            self.user = user
+        else:
+            self.user_id = user
+        if isinstance( recipe, Recipe):
+            self.recipe = recipe
+        else:
+            self.recipe_id = recipe
 
     def __repr__(self):
-        return '<Eatlist - ({},{})>'.format(str(self.user.id), str(self.recipe.id))
+        return '<Eatlist - ({},{})>'.format(str(self.user_id), str(self.recipe_id))

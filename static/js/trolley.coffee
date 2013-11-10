@@ -70,23 +70,6 @@ hideKeyboard = ->
   document.activeElement.blur()
   $("input").blur()
 
-$('#searchForm').on('change', 'input[name=servings]', ->
-  selected = $.trim($(@).parent('label').text())
-  $('button[data-target=#servingSelector]').text(selected)
-  $('#servingSelector').collapse('hide')
-)
-
-$('.navbar-collapse').on('click', 'a[data-toggle=tab]', ->
-  $(@).parents('.navbar-collapse').removeClass('in').addClass('collapse')
-)
-
-$('#searchResults').parent('.carousel').swipe(
-  swipe: (event, direction, distance, duration, fingerCount) ->
-    switch direction
-      when 'left' then $(this).carousel('next')
-      when 'right' then $(this).carousel('prev')
-)
-
 #############################################################################
 ### UTILITY FUNCTIONS
 #############################################################################
@@ -128,8 +111,9 @@ initEatListFromServer = ->
 ### CLICK HANDLERS
 #############################################################################
 
-recipeClickHandler = (e) ->
-  id = parseInt $(@).attr('recipe-id')
+recipeClickHandler = (e, t) ->
+  item = if $(@).is('.carousel') then $('.active', @) else $(@)
+  id = parseInt item.attr('recipe-id')
   recipe = recipes.find (recipe) ->
     recipe.get('id') == id
 
@@ -176,10 +160,10 @@ cancelHandler = (e) ->
 
 submitHandler = (e) ->
   $('#submitIcon').removeClass('glyphicon-cutlery')
-  $('#submitIcon').addClass('glyphicon-upload')
+  $('#submitIcon').addClass('glyphicon-shopping-cart')
 
   done = ->
-    $('#submitIcon').removeClass('glyphicon-upload')
+    $('#submitIcon').removeClass('glyphicon-shopping-cart')
     $('#submitIcon').addClass('glyphicon-ok')
 
     $('#submitIcon').parent().removeClass('btn-primary')
@@ -207,11 +191,27 @@ initEatListHandler = (jsonEatList) ->
 
   recipe.addToShoppingList() for recipe in eatListRecipes
 
-flash = (element) ->
-  element.addClass('flash')
-  x = -> element.removeClass('flash')
-  setTimeout(x, 200)
+#############################################################################
+### MISC LISTENERS
+#############################################################################
 
+$('#searchForm').on('change', 'input[name=servings]', ->
+  selected = $.trim($(@).parent('label').text())
+  $('button[data-target=#servingSelector]').text(selected)
+  $('#servingSelector').collapse('hide')
+)
+
+$('.navbar-collapse').on('click', 'a[data-toggle=tab]', ->
+  $(@).parents('.navbar-collapse').removeClass('in').addClass('collapse')
+)
+
+$('#searchResults').parent('.carousel').swipe(
+  swipe: (event, direction, distance, duration, fingerCount) ->
+    switch direction
+      when 'left' then $(this).carousel('next')
+      when 'right' then $(this).carousel('prev')
+  tap: recipeClickHandler
+)
 
 #############################################################################
 ### ON LOAD
@@ -232,6 +232,9 @@ $ ->
   searchResultTemplate = $('#searchResultTemplate').html()
   historyRecipeTemplate = $('#historyRecipeTemplate').html()
   starredRecipeTemplate = $('#historyRecipeTemplate').html()
+
+  # init date pickers to today
+  $('input[type=date]').get(0).valueAsDate = new Date()
 
   #############################################################################
   ### SEARCH
@@ -261,7 +264,6 @@ $ ->
     searchResultsBox.html('')
     searchResultsBox.append renderedResult for renderedResult in renderedResults
     $('#searchResults .item:first').addClass 'active'
-    searchResultsBox.children().click recipeClickHandler
 
     # show the carousel div and rebind
     carousel = $('#searchResults').parent('.carousel')
