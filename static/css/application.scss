@@ -6,7 +6,7 @@ body {
 }
 
 body > .navbar-fixed-top {
-  background: #e82c0c;
+  background: #FE6E7E;
   border-bottom: 0;
 
   .navbar-brand, .navbar-nav > li > a, .navbar-nav > li.active > a {
@@ -15,11 +15,16 @@ body > .navbar-fixed-top {
     }
   }
 
+  .navbar-nav > li > a {
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+
   .navbar-nav > li.active > a {
-    background: #c22308;
+    background: #C75663;
 
     &:hover {
-      background: #ab1d05;
+      background: #BF4B56;
     }
   }
 
@@ -27,7 +32,7 @@ body > .navbar-fixed-top {
     border-color: #fff;
 
     &:hover {
-      background: #ab1d05;
+      background: #C75663;
     }
 
     .icon-bar {
