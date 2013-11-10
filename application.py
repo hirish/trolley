@@ -79,7 +79,8 @@ def star(user):
             'serves': r.serves,
             'rating': r.rating,
             'prep_time': r.prep_time,
-            'cook_time': r.cook_time
+            'cook_time': r.cook_time,
+            'star': r.star
         }
         to_return.append(result_dict)
     return json.dumps({'results': to_return})
