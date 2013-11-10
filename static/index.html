@@ -75,7 +75,19 @@
         </fieldset>
       </form>
 
-      <div id="searchResults"></div>
+      <div class="carousel slide" data-ride="carousel">
+        <div id="searchResults" class="carousel-inner">
+          <!-- results here -->
+        </div>
+
+        <!-- Controls -->
+        <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+          <span class="glyphicon glyphicon-chevron-left"></span>
+        </a>
+        <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+          <span class="glyphicon glyphicon-chevron-right"></span>
+        </a>
+      </div>
     </div> <!-- /container -->
 
     <div id="history" class="container" style="display: none;">
@@ -91,9 +103,12 @@
     </script>
 
     <script type="text/template" id="searchResultTemplate">
-      <div>
-        Name: <%= name %>
-        <img src="<%= imageURL %>" />
+      <div class="item active">
+        <img src="<%= imageURL %>" alt="<%= name %>" />
+        <div class="carousel-caption">
+          <h3><%= name %></h3>
+          <p><%= description %></p>
+        </div>
       </div>
     </script>
 
