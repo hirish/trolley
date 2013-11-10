@@ -71,11 +71,11 @@ def ingredients(recipe):
 
 @application.route('/<user>/history')
 def history(user):
-    from datetime import datetime
-    recipes = Recipe.query.filter_by(Eatlist.date_last_bought < datetime.now()).all()
-    # return json.dumps({'history': [], 'limit': limit})
-    # return json.dumps({'results': [get_recipe(0), get_recipe(1), get_recipe(2)]})
-    return '{"results": [{"url": "http://www.google.com", "rating": 2, "imageUrl": "http://www.jonathanmalm.com/wp-content/uploads/2011/01/beautiful-food.jpg", "isStarred": false, "name": "Spaghetti Bolognese"}, {"url": "http://www.google.com", "rating": 5, "imageUrl": "http://i.telegraph.co.uk/multimedia/archive/00793/Spaghe-Bolog_793727c.jpg", "isStarred": false, "name": "Veggie Spaghetti Bolognese"}, {"url": "http://www.google.com", "rating": 1, "imageUrl": "http://www.jonathanmalm.com/wp-content/uploads/2011/01/beautiful-food.jpg", "isStarred": true, "name": "Simple Bolognese"}]}'
+    r1 = Recipe.query.get(4456).dictify()
+    r2 = Recipe.query.get(4488).dictify()
+    r3 = Recipe.query.get(3929).dictify() 
+    return json.dumps({'results': [r1, r2, r3]})
+    #return '{"results": [{"url": "http://www.google.com", "rating": 2, "imageUrl": "http://www.jonathanmalm.com/wp-content/uploads/2011/01/beautiful-food.jpg", "isStarred": false, "name": "Spaghetti Bolognese"}, {"url": "http://www.google.com", "rating": 5, "imageUrl": "http://i.telegraph.co.uk/multimedia/archive/00793/Spaghe-Bolog_793727c.jpg", "isStarred": false, "name": "Veggie Spaghetti Bolognese"}, {"url": "http://www.google.com", "rating": 1, "imageUrl": "http://www.jonathanmalm.com/wp-content/uploads/2011/01/beautiful-food.jpg", "isStarred": true, "name": "Simple Bolognese"}]}'
 
 @application.route('/<user>/star', methods=['GET','POST'])
 def star(user):
