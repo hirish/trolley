@@ -17,6 +17,16 @@ Recipe = Backbone.Model.extend
     servingSize: 2
     isStarred: false
     rating: 0
+    description: "This is a description"
+
+  attributeObject = ->
+    return {
+      name: @.get('name')
+      imageURL: @.get('imageURL')
+      isStarred: @.get('isStarred')
+      rating: @.get('rating')
+      description: @.get('description')
+    }
 
 Recipes = Backbone.Collection.extend
   model: Recipe
@@ -40,6 +50,7 @@ $('#searchForm').on('change', 'input[name=servings]', ->
 
 selected = '#eat-now'
 switchTab = (e) ->
+  $('.navbar-collapse').collapse('hide')
   $(@).tab('show')
   $(selected).hide()
 
@@ -65,6 +76,7 @@ $ ->
       servingSize: 2
       isStarred: false
       rating: 5
+      description: "This is a really delicious bolognese sauce made with the finest truffles."
 
   myBolognese = new EatListRecipe
     baseRecipe: bolognese
@@ -106,11 +118,14 @@ $ ->
     _.template searchResultTemplate,
       name: result.get('name')
       imageURL: result.get('imageURL')
+      isStarred: result.get('isStarred')
+      rating: result.get('rating')
+      description: result.get('description')
 
   searchResultHandler = (jsonResults) ->
     # Turn JSON recipes into recipe objects
     results = $.parseJSON(jsonResults).results
-    results = [results]
+    results = [results, results, results]
     recipeResults = (createRecipeFromJSON result for result in results)
 
     # Render the recipes
