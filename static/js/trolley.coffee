@@ -102,10 +102,12 @@ $ ->
 
   searchBox = $('#search')
   searchResultsBox = $('#searchResults')
+  historyRecipesBox = $('#historyResults')
   errorBox = $('#error')
 
   errorTemplate = $('#errorTemplate').html()
   searchResultTemplate = $('#searchResultTemplate').html()
+  historyRecipeTemplate = $('#historyRecipeTemplate').html()
 
   createRecipeFromJSON = (jsonRecipe) ->
     # Filler
@@ -158,12 +160,13 @@ $ ->
 
   historyHandler = (jsonHistory) ->
     # Parse JSON History into recipe objects
-    history = $.parseJSON jsonHistory.results
-    history = [history]
-    historyRecipes (createRecipeFromJSON result for result in history)
+    # history = $.parseJSON jsonHistory.results
+    # history = [history]
+    # historyRecipes (createRecipeFromJSON result for result in history)
+    historyRecipes = [bolognese, curry]
 
     # Render recipes
-    renderedHistoryRecipes = (renderHistoryRecipe recipe for recipe in historyRecipes)
+    renderedHistoryRecipes = (renderRecipe historyRecipeTemplate, recipe for recipe in historyRecipes)
 
     historyRecipesBox.html('')
     historyRecipesBox.append renderedRecipe for renderedRecipe in renderedHistoryRecipes
@@ -182,3 +185,4 @@ $ ->
     errorBox.html renderedTemplate
 
   searchBox.change throttledSearch
+  loadHistory()

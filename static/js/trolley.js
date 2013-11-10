@@ -72,7 +72,7 @@ switchTab = function(e) {
 };
 
 $(function() {
-  var anotherBolognese, bolognese, bologneseIngredients, createRecipeFromJSON, curry, eatlist, errorBox, errorHandler, errorTemplate, finalBolognese, historyHandler, loadHistory, myBolognese, pasta, renderHistoryRecipe, renderRecipe, search, searchBox, searchResultHandler, searchResultTemplate, searchResultsBox, throttledSearch, userId;
+  var anotherBolognese, bolognese, bologneseIngredients, createRecipeFromJSON, curry, eatlist, errorBox, errorHandler, errorTemplate, finalBolognese, historyHandler, historyRecipeTemplate, historyRecipesBox, loadHistory, myBolognese, pasta, renderHistoryRecipe, renderRecipe, search, searchBox, searchResultHandler, searchResultTemplate, searchResultsBox, throttledSearch, userId;
   $('#tab-switch li a').click(switchTab);
   window.userId = userId = 1;
   pasta = new Ingredient({
@@ -117,9 +117,11 @@ $(function() {
   eatlist = [myBolognese, anotherBolognese, finalBolognese];
   searchBox = $('#search');
   searchResultsBox = $('#searchResults');
+  historyRecipesBox = $('#historyResults');
   errorBox = $('#error');
   errorTemplate = $('#errorTemplate').html();
   searchResultTemplate = $('#searchResultTemplate').html();
+  historyRecipeTemplate = $('#historyRecipeTemplate').html();
   createRecipeFromJSON = function(jsonRecipe) {
     return bolognese;
   };
@@ -182,24 +184,14 @@ $(function() {
     });
   };
   historyHandler = function(jsonHistory) {
-    var history, recipe, renderedHistoryRecipes, renderedRecipe, result, _i, _len, _results;
-    history = $.parseJSON(jsonHistory.results);
-    history = [history];
-    historyRecipes((function() {
-      var _i, _len, _results;
-      _results = [];
-      for (_i = 0, _len = history.length; _i < _len; _i++) {
-        result = history[_i];
-        _results.push(createRecipeFromJSON(result));
-      }
-      return _results;
-    })());
+    var historyRecipes, recipe, renderedHistoryRecipes, renderedRecipe, _i, _len, _results;
+    historyRecipes = [bolognese, curry];
     renderedHistoryRecipes = (function() {
       var _i, _len, _results;
       _results = [];
       for (_i = 0, _len = historyRecipes.length; _i < _len; _i++) {
         recipe = historyRecipes[_i];
-        _results.push(renderHistoryRecipe(recipe));
+        _results.push(renderRecipe(historyRecipeTemplate, recipe));
       }
       return _results;
     })();
@@ -224,5 +216,6 @@ $(function() {
     });
     return errorBox.html(renderedTemplate);
   };
-  return searchBox.change(throttledSearch);
+  searchBox.change(throttledSearch);
+  return loadHistory();
 });
