@@ -24,6 +24,14 @@ Recipe = Backbone.Model.extend
     rating: 0
     description: "This is a description"
 
+  initialize: ->
+    $.ajax "/recipe/#{@.get('id')}/ingredients",
+      success: (response) =>
+        data = $.parseJSON(response).results
+        ingredients = (createIngredientFromJSON ingredientJSON for ingredientJSON in data)
+        @.set('ingredients', ingredients)
+        console.log @.get('ingredients')
+
   attributeObject: ->
     return {
       name: @.get('name')
@@ -84,12 +92,6 @@ createIngredientFromJSON = (jsonIngredient) ->
     name: jsonIngredient.name
     type: jsonIngredient.type
     quantity: jsonIngredient.quantity
-
-getIngredientsForRecipe = (recipe) ->
-  response = $.ajax "/recipe/#{recipe.get('id')}/ingredients", async: false
-  console.log response.responseText
-  data = $.parseJSON(response.responseText).results
-  (createIngredientFromJSON ingredientJSON for ingredientJSON in data)
 
 #############################################################################
 ### ON LOAD
