@@ -42,35 +42,39 @@ def bbc_measurements(s):
         return 'count', 1
 
 def bbc_normal_measurements(s):
-    nums = [int(x) for x in s.split() if x.isdigit()]
-    unit = None
+    num = get_num(s)
     _type = None
     quantity = None
-    for num in nums:
+    if num:
+        unit = None
         s_num = str(num)
         unit_start = s.index(s_num) + len(s_num)
         if unit_start < len(s) - 2 and s[unit_start] != ' ':
             if ' ' in s[unit_start:]:
-                unit_end = s[unit_start:].index(' ')
+                unit_end = s[unit_start:].index(' ') + unit_start
                 unit = s[unit_start:unit_end].lower()
                 quantity = num
             else:
                 unit = s[unit_start:].lower()
                 quantity = num
-            break
-    if unit:
-        if 'ml' in unit:
-            _type = 'volume'
-        elif 'l' in unit:
-            _type = 'volume'
-        elif 'g' in unit:
-            _type = 'weight'
-        elif 'kg' in unit:
-            _type = 'weight'
+        if unit:
+            if 'ml' in unit:
+                _type = 'volume'
+            elif 'l' in unit:
+                _type = 'volume'
+                quantity *= 1000
+            elif 'kg' in unit:
+                _type = 'weight'
+                quantity *= 1000
+            elif 'g' in unit:
+                _type = 'weight'
+            else:
+                _type = 'count'
         else:
+            quantity = num
             _type = 'count'
-    elif len(nums) > 0:
-        quantity = nums[0]
+    else:
+        quantity = 1
         _type = 'count'
     return _type, quantity
 
@@ -79,29 +83,35 @@ def bbc_spoon_measurements(s):
     quantity = None
     if 'tsp' in s:
         _type = 'volume'
-        quantity = get_quantity('tsp', s) * 5 # 1 tsp is 5ml
+        quantity = get_num(s) * 5 # 1 tsp is 5ml
     elif 'tbsp' in s:
         _type = 'volume'
-        quantity = get_quantity('tbsp', s) * 15 # 1 tbsp is 15ml
+        quantity = get_num(s) * 15 # 1 tbsp is 15ml
     else:
         _type = None
         quantity = None
     return _type, quantity
 
-def get_quantity(unit, s):
-    s = s.lower()
-    i = s.index(unit)
-    quantity = [int(x) for x in s[:i].split() if x.isdigit()]
-    if len(quantity) == 0:
-        quantity = 1
-    else:
-        quantity = quantity[-1]  
-    return quantity
+def get_num(x):
+    try:
+        return int(''.join(ele for ele in x if ele.isdigit()))
+    except ValueError:
+        return None
 
 
-print "bbc_spoon_measurements('4 tbsp of milk')", bbc_spoon_measurements('4 tbsp of milk')
-print "bbc_spoon_measurements('4 tsp of milk')", bbc_spoon_measurements('4 tsp of milk')
+# basic testing rigprint "bbc_spoon_measurements('4 tbsp of milk')", bbc_spoon_measurements('4 tbsp of milk')
+'''print "bbc_spoon_measurements('4 tsp of milk')", bbc_spoon_measurements('4 tsp of milk')
 print "bbc_spoon_measurements('400ml of milk')", bbc_spoon_measurements('400ml of milk')
+print "bbc_normal_measurements('400ml of milk')", bbc_normal_measurements('400ml of milk')
+print "bbc_normal_measurements('400g of milk')", bbc_normal_measurements('400g of milk')
+print "bbc_normal_measurements('400ml of milk')", bbc_normal_measurements('400ml of milk')
+print "bbc_normal_measurements('4kg of milk')", bbc_normal_measurements('4kg of milk')
+print "bbc_measurements('400ml of milk')", bbc_measurements('400ml of milk')
+print "bbc_measurements('4kg of milk')", bbc_measurements('4kg of milk')
+print "bbc_measurements('4 tbsp of milk')", bbc_measurements('4 tbsp of milk')
+print "bbc_measurements('4sp of milk')", bbc_measurements('4tsp of milk')
+print "bbc_normal_measurements('3 kaffir lime leaves')", bbc_normal_measurements('3 kaffir lime leaves')
+print "bbc_normal_measurements('a kaffir lime leaves')", bbc_normal_measurements('a kaffir lime leaves')'''
 
 
 def basic_parse(site):
