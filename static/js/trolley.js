@@ -2,7 +2,7 @@
 /* MODELS
 */
 
-var EatList, EatListRecipe, Ingredient, Ingredients, Recipe, Recipes, addedToEatListHandler, buyHandler, cancelHandler, createIngredientFromJSON, createRecipeFromJSON, getIngredientsForRecipe, hideKeyboard, recipeClickHandler, submitHandler;
+var EatList, EatListRecipe, Ingredient, Ingredients, Recipe, Recipes, addedToEatListHandler, buyHandler, cancelHandler, createIngredientFromJSON, createRecipeFromJSON, getIngredientsForRecipe, hideKeyboard, initEatListFromServer, initEatListHandler, recipeClickHandler, submitHandler;
 
 Ingredient = Backbone.Model.extend({
   defaults: {
@@ -167,6 +167,13 @@ getIngredientsForRecipe = function(recipe) {
   return _results;
 };
 
+initEatListFromServer = function() {
+  return $.ajax('/1/eatlist', {
+    success: initEatListHandler,
+    error: errorHandler
+  });
+};
+
 /* CLICK HANDLERS
 */
 
@@ -254,6 +261,26 @@ submitHandler = function(e) {
   };
   setTimeout(done, 500);
   return setTimeout(reset, 1000);
+};
+
+initEatListHandler = function(jsonEatList) {
+  var eatList, eatListRecipes, recipe, result, _i, _len, _results;
+  eatList = $.parseJSON(jsonEatList).results;
+  eatListRecipes = (function() {
+    var _i, _len, _results;
+    _results = [];
+    for (_i = 0, _len = eatList.length; _i < _len; _i++) {
+      result = eatList[_i];
+      _results.push(createRecipeFromJSON(result));
+    }
+    return _results;
+  })();
+  _results = [];
+  for (_i = 0, _len = eatListRecipes.length; _i < _len; _i++) {
+    recipe = eatListRecipes[_i];
+    _results.push(recipe.addToShoppingList());
+  }
+  return _results;
 };
 
 /* ON LOAD
