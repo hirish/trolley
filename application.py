@@ -3,6 +3,7 @@
 from flask import Flask
 from flask import request
 import json
+from utils import get_recipe
 
 application = Flask(__name__, static_folder='static', static_url_path='')
 app = application
@@ -14,7 +15,23 @@ def index():
 @app.route('/<user>/search')
 def search(user):
     query = request.args.get('q')
-    return json.dumps({'results': query})
+    results = []
+    if query == 'spag bol':
+        results.append(get_recipe(0))
+        results.append(get_recipe(1))
+        results.append(get_recipe(2))
+    elif query == 'fish and chips':
+        results.append(get_recipe(3))
+        results.append(get_recipe(4))
+    return json.dumps({'results': results})
+
+@app.route('/recipe/<recipe>', methods=['GET','POST'])
+def recipe(recipe):
+    if request.method == 'POST':
+        #fb.post('/recipe',
+        print 'POST'
+    recipe = get_recipe(recipe) 
+    return json.dumps(recipe)
 
 @app.route('/<user>/history')
 def history(user):
