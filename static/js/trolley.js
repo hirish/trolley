@@ -160,7 +160,8 @@ $(function() {
       renderedResult = renderedResults[_i];
       searchResultsBox.append(renderedResult);
     }
-    return $('#searchResults .item:first').addClass('active');
+    $('#searchResults .item:first').addClass('active');
+    return $('#searchResults').parent().removeClass('hidden');
   };
   /* HISTORY
   */

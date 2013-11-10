@@ -136,6 +136,8 @@ $ ->
     searchResultsBox.append renderedResult for renderedResult in renderedResults
     $('#searchResults .item:first').addClass 'active'
 
+    $('#searchResults').parent().removeClass 'hidden'
+
   #############################################################################
   ### HISTORY
   #############################################################################
