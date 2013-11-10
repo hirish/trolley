@@ -5,5 +5,18 @@ body {
 #searchForm {
   fieldset > .row {
     margin-bottom: 1em;
+
+    .col-xs-9 {
+      padding-right: 0;
+    }
+  }
+}
+
+.carousel {
+  .item {
+    overflow: hidden;
+    img {
+      width: 100%;
+    }
   }
 }

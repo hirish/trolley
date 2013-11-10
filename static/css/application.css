@@ -3,3 +3,10 @@ body {
 
 #searchForm fieldset > .row {
   margin-bottom: 1em; }
+  #searchForm fieldset > .row .col-xs-9 {
+    padding-right: 0; }
+
+.carousel .item {
+  overflow: hidden; }
+  .carousel .item img {
+    width: 100%; }
