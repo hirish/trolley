@@ -123,7 +123,7 @@ $ ->
   createRecipeFromJSON = (jsonRecipe) ->
     new Recipe
       url: jsonRecipe.url
-      rating: jsonRecipe.rating
+      rating: 3
       imageUrl: jsonRecipe.imageUrl
       isStarred: jsonRecipe.isStarred
       name: jsonRecipe.name
