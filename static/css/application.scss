@@ -102,3 +102,31 @@ h1, h2, h3, h4, h5, h6, legend {
     }
   }
 }
+
+.eatListRecipe {
+
+  h2 {
+    margin-bottom: 1em;
+  }
+
+  ul {
+    list-style: none;
+    padding-left: 0;
+
+    li {
+      border-bottom: 1px solid #ddd;
+      color: #777;
+      overflow: hidden;
+      
+      h4, p, .close {
+        line-height: 1em;
+        margin: 10px 0;
+      }
+
+      .close {
+        float: left;
+        margin-right: 0.5em;
+      }
+    }
+  }
+}

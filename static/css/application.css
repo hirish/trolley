@@ -59,3 +59,19 @@ h1, h2, h3, h4, h5, h6, legend {
       color: #ffc90e; }
     #historyResults li img, #starredResults li img {
       width: 100%; }
+
+.eatListRecipe h2 {
+  margin-bottom: 1em; }
+.eatListRecipe ul {
+  list-style: none;
+  padding-left: 0; }
+  .eatListRecipe ul li {
+    border-bottom: 1px solid #ddd;
+    color: #777;
+    overflow: hidden; }
+    .eatListRecipe ul li h4, .eatListRecipe ul li p, .eatListRecipe ul li .close {
+      line-height: 1em;
+      margin: 10px 0; }
+    .eatListRecipe ul li .close {
+      float: left;
+      margin-right: 0.5em; }
