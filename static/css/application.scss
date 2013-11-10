@@ -6,7 +6,7 @@ body {
 }
 
 body > .navbar-fixed-top {
-  background: #FE6E7E;
+  background: #fe6e7e;
   border-bottom: 0;
 
   .navbar-brand, .navbar-nav > li > a, .navbar-nav > li.active > a {
@@ -21,10 +21,10 @@ body > .navbar-fixed-top {
   }
 
   .navbar-nav > li.active > a {
-    background: #C75663;
+    background: #c75663;
 
     &:hover {
-      background: #BF4B56;
+      background: #bf4b56;
     }
   }
 
@@ -177,4 +177,14 @@ h1, h2, h3, h4, h5, h6, legend {
 .preventScrolling {
   height: 100%;
   overflow: hidden;
+}
+
+.btn {
+  text-transform: uppercase;
+
+  &.btn-primary {
+    color: #fff;
+    background: #fe6e7e;
+    border: 0;
+  }
 }

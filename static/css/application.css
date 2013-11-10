@@ -5,7 +5,7 @@ body {
   color: #555; }
 
 body > .navbar-fixed-top {
-  background: #FE6E7E;
+  background: #fe6e7e;
   border-bottom: 0; }
   body > .navbar-fixed-top .navbar-brand, body > .navbar-fixed-top .navbar-brand:hover, body > .navbar-fixed-top .navbar-nav > li > a, body > .navbar-fixed-top .navbar-nav > li > a:hover, body > .navbar-fixed-top .navbar-nav > li.active > a, body > .navbar-fixed-top .navbar-nav > li.active > a:hover {
     color: #fff; }
@@ -13,9 +13,9 @@ body > .navbar-fixed-top {
     padding-top: 16px;
     padding-bottom: 16px; }
   body > .navbar-fixed-top .navbar-nav > li.active > a {
-    background: #C75663; }
+    background: #c75663; }
     body > .navbar-fixed-top .navbar-nav > li.active > a:hover {
-      background: #BF4B56; }
+      background: #bf4b56; }
   body > .navbar-fixed-top .navbar-toggle {
     border-color: #fff; }
     body > .navbar-fixed-top .navbar-toggle:hover {
@@ -112,3 +112,10 @@ h1, h2, h3, h4, h5, h6, legend {
 .preventScrolling {
   height: 100%;
   overflow: hidden; }
+
+.btn {
+  text-transform: uppercase; }
+  .btn.btn-primary {
+    color: #fff;
+    background: #fe6e7e;
+    border: 0; }
