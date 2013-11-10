@@ -68,13 +68,18 @@ h1, h2, h3, h4, h5, h6, legend {
   .eatListRecipe ul li {
     border-bottom: 1px solid #ddd;
     color: #777;
-    overflow: hidden; }
+    overflow: hidden;
+    position: relative;
+    padding-left: 0.5em; }
     .eatListRecipe ul li h4, .eatListRecipe ul li p, .eatListRecipe ul li .close {
       line-height: 1em;
       margin: 10px 0; }
     .eatListRecipe ul li .close {
-      float: left;
-      margin-right: 0.5em; }
+      position: absolute;
+      top: 0;
+      left: 0; }
+    .eatListRecipe ul li h4 {
+      padding-left: 0.5em; }
 
 .hideBg {
   position: fixed;
