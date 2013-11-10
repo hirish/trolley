@@ -19,7 +19,7 @@ Recipe = Backbone.Model.extend
     rating: 0
     description: "This is a description"
 
-  attributeObject = ->
+  attributeObject: ->
     return {
       name: @.get('name')
       imageURL: @.get('imageURL')
@@ -124,13 +124,8 @@ $ ->
   # Prevent search being called too frequently; this is a mobile app!
   throttledSearch = _.throttle search, 250
 
-  renderSearchResult = (result) ->
-    _.template searchResultTemplate,
-      name: result.get('name')
-      imageURL: result.get('imageURL')
-      isStarred: result.get('isStarred')
-      rating: result.get('rating')
-      description: result.get('description')
+  renderRecipe = (template, recipe) ->
+    _.template template, recipe.attributeObject()
 
   searchResultHandler = (jsonResults) ->
     console.log "Returned"
@@ -142,7 +137,7 @@ $ ->
     recipeResults = [bolognese, curry]
 
     # Render the recipes
-    renderedResults = (renderSearchResult recipeResult for recipeResult in recipeResults)
+    renderedResults = (renderRecipe searchResultTemplate, recipeResult for recipeResult in recipeResults)
 
     # Add rendered results to the search results
     searchResultsBox.html('')
