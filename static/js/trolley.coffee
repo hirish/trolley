@@ -112,11 +112,13 @@ $ ->
   searchBox = $('#search')
   searchResultsBox = $('#searchResults')
   historyRecipesBox = $('#historyResults')
+  starredRecipesBox = $('#starredResults')
   errorBox = $('#error')
 
   errorTemplate = $('#errorTemplate').html()
   searchResultTemplate = $('#searchResultTemplate').html()
   historyRecipeTemplate = $('#historyRecipeTemplate').html()
+  starredRecipeTemplate = $('#historyRecipeTemplate').html()
 
   createRecipeFromJSON = (jsonRecipe) ->
     new Recipe
@@ -187,10 +189,28 @@ $ ->
     historyRecipesBox.html('')
     historyRecipesBox.append renderedRecipe for renderedRecipe in renderedHistoryRecipes
 
+  #############################################################################
+  ### STARRED
+  #############################################################################
 
-  renderHistoryRecipe = (result) ->
-    return true
-    #_.tempalte
+  loadStarred = ->
+    console.log "Loading Starred..."
+    console.log "Fix starred"
+    # $.ajax "/#{userId}/history",
+    $.ajax "/#{userId}/search?q=spag bol",
+      success: starredHandler
+      error: errorHandler
+
+  starredHandler = (jsonStarred) ->
+    # Parse JSON Starred into recipe objects
+    starred = $.parseJSON(jsonStarred).results
+    starredRecipes = (createRecipeFromJSON result for result in starred)
+
+    # Render recipes
+    renderedStarredRecipes = (renderRecipe starredRecipeTemplate, recipe for recipe in starredRecipes)
+
+    starredRecipesBox.html('')
+    starredRecipesBox.append renderedRecipe for renderedRecipe in renderedStarredRecipes
 
   #############################################################################
   ### ERROR HANDLING
@@ -202,3 +222,4 @@ $ ->
 
   searchBox.change throttledSearch
   loadHistory()
+  loadStarred()
