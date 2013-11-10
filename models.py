@@ -29,7 +29,7 @@ class Recipe(db.Model):
     ingredients = db.relationship('Ingredient',
                                     backref='recipe',
                                     foreign_keys='Ingredient.recipe_id')
-    rating = db.Column(db.Boolean,default=False)
+    rating = db.Column(db.Integer)
     eatlist = db.relationship('Eatlist',
                                 backref='recipe',
                                 foreign_keys='Eatlist.recipe_id')

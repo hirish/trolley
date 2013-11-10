@@ -18,8 +18,7 @@ def search(user):
     query = request.args.get('q').lower()
     results = Recipe.query.whoosh_search(query).all()
     print results
-    for r in results:
-        print str(r.id) + " " + r.title
+    results = [ {r.id: r.title} for r in results ]
     return json.dumps({'results': results})
 
 @app.route('/recipe/<recipe>', methods=['GET','POST'])
