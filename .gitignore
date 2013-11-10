@@ -41,4 +41,4 @@ nosetests.xml
 logs.txt
 deploy
 testing/
-static/js/trolley.js
+*.js
