@@ -1,9 +1,9 @@
 from config import db
 
 class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(256))
-    eatlist = db.Relationship('Eatlist',
+    eatlist = db.relationship('Eatlist',
                                 backref='user',
                                 foreign_keys='Eatlist.user_id')
 
@@ -11,7 +11,7 @@ class User(db.Model):
         self.name = name
 
     def __repr__(self):
-        return '<User %s - %s>' % str(self.id), self.name
+        return '<User {} - {}>'.format(str(self.id), self.name)
 
 class Recipe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -22,7 +22,7 @@ class Recipe(db.Model):
     serves = db.Column(db.Integer)
     prep_time = db.Column(db.String(120))
     cook_time = db.Column(db.String(120))
-    ingredients = db.Relationship('Ingredient',
+    ingredients = db.relationship('Ingredient',
                                     backref='recipe',
                                     foreign_keys='Ingredient.recipe_id')
     star = db.Column(db.Boolean,default=False)
@@ -33,11 +33,11 @@ class Recipe(db.Model):
         self.image = image
 
     def __repr__(self):
-        return '<Recipe %s - %s>' % str(self.id), self.title
+        return '<Recipe {} - {}>'.format(str(self.id), self.title)
 
 class Ingredient(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    recipe_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'))
     name = db.Column(db.String(512))
     type = db.Column(db.String(256))
     quantity = db.Column(db.Float)
@@ -48,7 +48,7 @@ class Ingredient(db.Model):
         self.name = name
 
     def __repr__(self):
-        return '<Ingredient %s - %s>' % str(self.id), self.name
+        return '<Ingredient {} - {}>'.format(str(self.id), self.name)
 
 class Eatlist(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -62,4 +62,4 @@ class Eatlist(db.Model):
         self.recipe = recipe
 
     def __repr__(self):
-        return '<Eatlist %s - (%s,%s)>' % str(self.id), str(self.user.id), str(self.recipe.id)
+        return '<Eatlist {} - ({},{})>'.format(str(self.id), str(self.user.id), str(self.recipe.id))
