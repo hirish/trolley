@@ -42,4 +42,4 @@ logs.txt
 deploy
 testing/
 *.js
-
+whoosh_index/

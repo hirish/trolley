@@ -1,5 +1,4 @@
 from config import db
-import flask.ext.whooshalchemy as whooshalchemy
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -15,9 +14,6 @@ class User(db.Model):
         return '<User - {}>'.format(self.name)
 
 class Recipe(db.Model):
-
-    __searchable__ = ['title']
-
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120))
     description = db.Column(db.Text)
@@ -40,7 +36,7 @@ class Recipe(db.Model):
         self.image = image
 
     def __repr__(self):
-        return '<Recipe - {}>'.format(self.title)
+        return u'<Recipe - {}>'.format(self.title)
 
 class Ingredient(db.Model):
     id = db.Column(db.Integer, primary_key=True)
