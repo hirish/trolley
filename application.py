@@ -40,17 +40,18 @@ def recipe(recipe):
         #fb.post('/recipe',
         print 'POST'
     r = Recipe.query.get(recipe) 
-    recipe_dict = {
-        'id' : r.id,
-        'name': r.title,
-        'description': r.description,
-        'url': r.url,
-        'imageUrl': r.image,
-        'serves': r.serves,
-        'rating': r.rating,
-        'prep_time': r.prep_time,
-        'cook_time': r.cook_time
-    }
+    #recipe_dict = {
+    #    'id' : r.id,
+    #    'name': r.title,
+    #    'description': r.description,
+    #    'url': r.url,
+    #    'imageUrl': r.image,
+    #    'serves': r.serves,
+    #    'rating': r.rating,
+    #    'prep_time': r.prep_time,
+    #    'cook_time': r.cook_time
+    #}
+    recipe_dict = r.dictify()
     return json.dumps({'recipe': recipe_dict})
 
 @application.route('/recipe/<recipe>/ingredients', methods=['GET'])
@@ -70,7 +71,8 @@ def ingredients(recipe):
 
 @application.route('/<user>/history')
 def history(user):
-    limit = request.args.get('limit')
+    from datetime import datetime
+    recipes = Recipe.query.filter_by(Eatlist.date_last_bought < datetime.now()).all()
     # return json.dumps({'history': [], 'limit': limit})
     # return json.dumps({'results': [get_recipe(0), get_recipe(1), get_recipe(2)]})
     return '{"results": [{"url": "http://www.google.com", "rating": 2, "imageUrl": "http://www.jonathanmalm.com/wp-content/uploads/2011/01/beautiful-food.jpg", "isStarred": false, "name": "Spaghetti Bolognese"}, {"url": "http://www.google.com", "rating": 5, "imageUrl": "http://i.telegraph.co.uk/multimedia/archive/00793/Spaghe-Bolog_793727c.jpg", "isStarred": false, "name": "Veggie Spaghetti Bolognese"}, {"url": "http://www.google.com", "rating": 1, "imageUrl": "http://www.jonathanmalm.com/wp-content/uploads/2011/01/beautiful-food.jpg", "isStarred": true, "name": "Simple Bolognese"}]}'
@@ -90,18 +92,19 @@ def star(user):
     recipes = Recipe.query.filter_by(star=True)
     to_return = []
     for r in recipes:
-        result_dict = {
-            'id' : r.id,
-            'name': r.title,
-            'description': r.description,
-            'url': r.url,
-            'imageUrl': r.image,
-            'serves': r.serves,
-            'rating': r.rating,
-            'prep_time': r.prep_time,
-            'cook_time': r.cook_time,
-            'star': r.star
-        }
+        #result_dict = {
+        #    'id' : r.id,
+        #    'name': r.title,
+        #    'description': r.description,
+        #    'url': r.url,
+        #    'imageUrl': r.image,
+        #    'serves': r.serves,
+        ##    'rating': r.rating,
+        #    'prep_time': r.prep_time,
+        #    'cook_time': r.cook_time,
+        #    'star': r.star
+        #}
+        result_dict = r.dictify()
         to_return.append(result_dict)
     return json.dumps({'results': to_return})
     #return '{"results": [{"url": "http://www.google.com", "rating": 0, "imageUrl": "http://www.jonathanmalm.com/wp-content/uploads/2011/01/beautiful-food.jpg", "isStarred": false, "name": "Spaghetti Bolognese"}, {"url": "http://www.google.com", "rating": 4, "imageUrl": "http://i.telegraph.co.uk/multimedia/archive/00793/Spaghe-Bolog_793727c.jpg", "isStarred": false, "name": "Veggie Spaghetti Bolognese"}, {"url": "http://www.google.com", "rating": 5, "imageUrl": "http://www.jonathanmalm.com/wp-content/uploads/2011/01/beautiful-food.jpg", "isStarred": true, "name": "Simple Bolognese"}]}'
@@ -111,7 +114,7 @@ def eatlist(user):
     eatlist = Eatlist.query.filter_by(user_id=user).all()
     to_return = []
     for e in eatlist:
-         to_return.append(recipe(e.recipe_id))
+         to_return.append(Recipe.query.get(e.recipe_id).dictify())
     return json.dumps({'eatlist': to_return})
 
 @application.route('/<user>/eatlist/<recipe>')

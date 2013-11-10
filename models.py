@@ -31,6 +31,21 @@ class Recipe(db.Model):
                                 foreign_keys='Eatlist.recipe_id')
     star = db.Column(db.Integer)
 
+    def dictify(self):
+        result_dict = { 
+            'id' : self.id,
+            'name': self.title,
+            'description': self.description,
+            'url': self.url,
+            'imageUrl': self.image,
+            'serves': self.serves,
+            'rating': self.rating,
+            'prep_time': self.prep_time,
+            'cook_time': self.cook_time,
+            'star': self.star
+        }
+        return result_dict
+
     def __init__(self, title, url, image):
         self.title = title
         self.url = url
