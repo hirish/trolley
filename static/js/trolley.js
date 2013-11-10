@@ -241,9 +241,9 @@ cancelHandler = function(e) {
 submitHandler = function(e) {
   var done, reset;
   $('#submitIcon').removeClass('glyphicon-cutlery');
-  $('#submitIcon').addClass('glyphicon-upload');
+  $('#submitIcon').addClass('glyphicon-shopping-cart');
   done = function() {
-    $('#submitIcon').removeClass('glyphicon-upload');
+    $('#submitIcon').removeClass('glyphicon-shopping-cart');
     $('#submitIcon').addClass('glyphicon-ok');
     $('#submitIcon').parent().removeClass('btn-primary');
     return $('#submitIcon').parent().addClass('btn-success');
@@ -301,6 +301,7 @@ $(function() {
   searchResultTemplate = $('#searchResultTemplate').html();
   historyRecipeTemplate = $('#historyRecipeTemplate').html();
   starredRecipeTemplate = $('#historyRecipeTemplate').html();
+  $('input[type=date]').get(0).valueAsDate = new Date();
   /* SEARCH
   */
 
