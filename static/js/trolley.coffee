@@ -85,7 +85,7 @@ $ ->
   createRecipeFromJSON = (jsonRecipe) ->
     new Recipe
       url: jsonRecipe.url
-      rating: 3
+      rating: jsonRecipe.rating
       imageUrl: jsonRecipe.imageUrl
       isStarred: jsonRecipe.isStarred
       name: jsonRecipe.name
@@ -134,9 +134,7 @@ $ ->
 
   loadHistory = ->
     console.log "Loading History..."
-    console.log "Fix history"
-    # $.ajax "/#{userId}/history",
-    $.ajax "/#{userId}/search?q=spag bol",
+    $.ajax "/#{userId}/history",
       success: historyHandler
       error: errorHandler
 
@@ -157,9 +155,7 @@ $ ->
 
   loadStarred = ->
     console.log "Loading Starred..."
-    console.log "Fix starred"
-    # $.ajax "/#{userId}/history",
-    $.ajax "/#{userId}/search?q=spag bol",
+    $.ajax "/#{userId}/star",
       success: starredHandler
       error: errorHandler
 

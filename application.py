@@ -36,7 +36,8 @@ def recipe(recipe):
 @app.route('/<user>/history')
 def history(user):
     limit = request.args.get('limit')
-    return json.dumps({'history': [], 'limit': limit})
+    # return json.dumps({'history': [], 'limit': limit})
+    return '{"results": [{"url": "http://www.google.com", "rating": 2, "imageUrl": "http://www.jonathanmalm.com/wp-content/uploads/2011/01/beautiful-food.jpg", "isStarred": false, "name": "Spaghetti Bolognese"}, {"url": "http://www.google.com", "rating": 5, "imageUrl": "http://i.telegraph.co.uk/multimedia/archive/00793/Spaghe-Bolog_793727c.jpg", "isStarred": false, "name": "Veggie Spaghetti Bolognese"}, {"url": "http://www.google.com", "rating": 1, "imageUrl": "http://www.jonathanmalm.com/wp-content/uploads/2011/01/beautiful-food.jpg", "isStarred": true, "name": "Simple Bolognese"}]}'
 
 @app.route('/<user>/star', methods=['GET','POST'])
 def star(user):
@@ -45,7 +46,8 @@ def star(user):
         recipe = request.args.get('recipe')
         #recipe.star()
         starred_recipes.append(recipe) # get all starred recipes
-    return json.dumps({'star': starred_recipes})
+    # return json.dumps({'star': starred_recipes})
+    return '{"results": [{"url": "http://www.google.com", "rating": 0, "imageUrl": "http://www.jonathanmalm.com/wp-content/uploads/2011/01/beautiful-food.jpg", "isStarred": false, "name": "Spaghetti Bolognese"}, {"url": "http://www.google.com", "rating": 4, "imageUrl": "http://i.telegraph.co.uk/multimedia/archive/00793/Spaghe-Bolog_793727c.jpg", "isStarred": false, "name": "Veggie Spaghetti Bolognese"}, {"url": "http://www.google.com", "rating": 5, "imageUrl": "http://www.jonathanmalm.com/wp-content/uploads/2011/01/beautiful-food.jpg", "isStarred": true, "name": "Simple Bolognese"}]}'
 
 @app.route('/<user>/eatlist', methods=['GET','POST'])
 def eatlist(user):
