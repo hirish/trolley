@@ -1,3 +1,7 @@
+#############################################################################
+### MODELS
+#############################################################################
+
 Ingredient = Backbone.Model.extend
   defaults:
     id: 0
@@ -61,6 +65,36 @@ $('#searchResults').parent('.carousel').swipe(
       when 'right' then $(this).carousel('prev')
 )
 
+#############################################################################
+### UTILITY FUNCTIONS
+#############################################################################
+
+createRecipeFromJSON = (jsonRecipe) ->
+  new Recipe
+    url: jsonRecipe.url
+    rating: jsonRecipe.rating
+    imageUrl: jsonRecipe.imageUrl
+    isStarred: jsonRecipe.isStarred
+    name: jsonRecipe.name
+    id: 1
+    description: "This description should be changed"
+
+createIngredientFromJSON = (jsonIngredient) ->
+  new Ingredient
+    name: jsonIngredient.name
+    type: jsonIngredient.type
+    quantity: jsonIngredient.quantity
+
+getIngredientsForRecipe = (recipe) ->
+  response = $.ajax "/recipe/#{recipe.get('id')}/ingredients", async: false
+  console.log response.responseText
+  data = $.parseJSON(response.responseText).results
+  (createIngredientFromJSON ingredientJSON for ingredientJSON in data)
+
+#############################################################################
+### ON LOAD
+#############################################################################
+
 $ ->
   window.userId = userId = 1
 
@@ -74,28 +108,6 @@ $ ->
   searchResultTemplate = $('#searchResultTemplate').html()
   historyRecipeTemplate = $('#historyRecipeTemplate').html()
   starredRecipeTemplate = $('#historyRecipeTemplate').html()
-
-  createRecipeFromJSON = (jsonRecipe) ->
-    new Recipe
-      url: jsonRecipe.url
-      rating: jsonRecipe.rating
-      imageUrl: jsonRecipe.imageUrl
-      isStarred: jsonRecipe.isStarred
-      name: jsonRecipe.name
-      id: 1
-      description: "This description should be changed"
-
-  createIngredientFromJSON = (jsonIngredient) ->
-    new Ingredient
-      name: jsonIngredient.name
-      type: jsonIngredient.type
-      quantity: jsonIngredient.quantity
-
-  getIngredientsForRecipe = (recipe) ->
-    response = $.ajax "/recipe/#{recipe.get('id')}/ingredients", async: false
-    console.log response.responseText
-    data = $.parseJSON(response.responseText).results
-    (createIngredientFromJSON ingredientJSON for ingredientJSON in data)
 
   #############################################################################
   ### SEARCH
