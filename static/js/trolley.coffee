@@ -112,8 +112,14 @@ $ ->
   historyRecipeTemplate = $('#historyRecipeTemplate').html()
 
   createRecipeFromJSON = (jsonRecipe) ->
-    # Filler
-    return bolognese
+    new Recipe
+      url: jsonRecipe.url
+      rating: jsonRecipe.rating
+      imageUrl: jsonRecipe.imageUrl
+      isStarred: jsonRecipe.isStarred
+      name: jsonRecipe.name
+      id: 1
+      description: "This description should be changed"
 
   #############################################################################
   ### SEARCH
@@ -136,9 +142,7 @@ $ ->
     console.log jsonResults
     # Turn JSON recipes into recipe objects
     results = $.parseJSON(jsonResults).results
-    results = [results, results, results]
     recipeResults = (createRecipeFromJSON result for result in results)
-    recipeResults = [bolognese, curry]
 
     # Render the recipes
     renderedResults = (renderRecipe searchResultTemplate, recipeResult for recipeResult in recipeResults)
