@@ -1,12 +1,10 @@
 #!/usr/bin/env python
-
-from flask import Flask
-from flask import request
+from flask import Flask, request
+import config
 import json
 from utils import get_recipe
 
-application = Flask(__name__, static_folder='static', static_url_path='')
-app = application
+app = config.application
 
 @app.route('/')
 def index():

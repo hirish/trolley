@@ -1,5 +1,6 @@
 import json
 from copy import copy
+import io
 
 bbc = 'bbc_crawl.json'
 
@@ -7,6 +8,23 @@ def multi_parse():
     data = []
     data += bbc_parse(bbc)
     return data
+
+def basic_parse(site):
+    json_data=open(site)
+    data = []
+    for line in json_data:
+        j_line = json.loads(line)
+        try:
+            # if the page was scraped properly we should have 11 fields
+            if len(j_line['results'][0]) == 11:
+                url = j_line['pageUrl']
+                j_line = j_line['results'][0]
+                j_line['url'] = url
+                data.append(j_line)
+        except KeyError:
+            continue
+    return data
+
 
 def bbc_parse(site):
     data = basic_parse(site)
@@ -26,6 +44,9 @@ def bbc_ingredients(s):
             ingredients[str(i)] = {}
             ingredients[str(i)]['name'] = s[:end_i]
             _type, quantity = bbc_measurements(ingredients[str(i)]['name'])
+            ingredients[str(i)]['type'] = _type
+            ingredients[str(i)]['quantity'] = quantity
+            ingredients[str(i)]['price'] = 0
             start_i = s.index('itemprop="ingredients') + 23
             i += 1
         except ValueError:
@@ -83,10 +104,16 @@ def bbc_spoon_measurements(s):
     quantity = None
     if 'tsp' in s:
         _type = 'volume'
-        quantity = get_num(s) * 5 # 1 tsp is 5ml
+        num = get_num(s)
+        if num == None:
+            num = 1
+        quantity = num * 5 # 1 tsp is 5ml
     elif 'tbsp' in s:
         _type = 'volume'
-        quantity = get_num(s) * 15 # 1 tbsp is 15ml
+        num = get_num(s)
+        if num == None:
+            num = 1
+        quantity = num * 15 # 1 tbsp is 15ml
     else:
         _type = None
         quantity = None
@@ -113,22 +140,6 @@ print "bbc_measurements('4sp of milk')", bbc_measurements('4tsp of milk')
 print "bbc_normal_measurements('3 kaffir lime leaves')", bbc_normal_measurements('3 kaffir lime leaves')
 print "bbc_normal_measurements('a kaffir lime leaves')", bbc_normal_measurements('a kaffir lime leaves')'''
 
-
-def basic_parse(site):
-    json_data=open(site)
-    data = []
-    for line in json_data:
-        j_line = json.loads(line)
-        try:
-            # if the page was scraped properly we should have 11 fields
-            if len(j_line['results'][0]) == 11:
-                url = j_line['pageUrl']
-                j_line = j_line['results'][0]
-                j_line['url'] = url
-                data.append(j_line)
-        except KeyError:
-            continue
-    return data
-
-
-
+data = multi_parse()
+with io.open('bbc.json', 'w', encoding='utf-8') as f:
+    f.write(unicode(json.dumps(data, sort_keys=True, indent=4, separators=(',', ': '))))
