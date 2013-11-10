@@ -154,6 +154,7 @@ addedToEatListHandler = (eatListRecipe) ->
 
 buyHandler = (e) ->
   $('.hideBg').show()
+  $('body').addClass('preventScrolling')
   x = ->
     $('.hideBg').addClass('in')
     $('#confirmation').addClass('in')
@@ -162,6 +163,7 @@ buyHandler = (e) ->
 cancelHandler = (e) ->
   $('.hideBg').removeClass('in')
   $('#confirmation').removeClass('in')
+  $('body').removeClass('preventScrolling')
   x = ->
    console.log('test')
    $('.hideBg').hide()

@@ -173,3 +173,8 @@ h1, h2, h3, h4, h5, h6, legend {
 .hideBg.fade.in {
   opacity: 1;
 }
+
+.preventScrolling {
+  height: 100%;
+  overflow: hidden;
+}
