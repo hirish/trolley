@@ -171,10 +171,10 @@ cancelHandler = (e) ->
 
 submitHandler = (e) ->
   $('#submitIcon').removeClass('glyphicon-cutlery')
-  $('#submitIcon').addClass('glyphicon-upload')
+  $('#submitIcon').addClass('glyphicon-shopping-cart')
 
   done = ->
-    $('#submitIcon').removeClass('glyphicon-upload')
+    $('#submitIcon').removeClass('glyphicon-shopping-cart')
     $('#submitIcon').addClass('glyphicon-ok')
 
     $('#submitIcon').parent().removeClass('btn-primary')
@@ -215,6 +215,9 @@ $ ->
   searchResultTemplate = $('#searchResultTemplate').html()
   historyRecipeTemplate = $('#historyRecipeTemplate').html()
   starredRecipeTemplate = $('#historyRecipeTemplate').html()
+
+  # init date pickers to today
+  $('input[type=date]').get(0).valueAsDate = new Date()
 
   #############################################################################
   ### SEARCH
