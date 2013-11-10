@@ -12,8 +12,9 @@ Recipe = Backbone.Model.extend
   defaults:
     id: 0
     name: null
+    url: null
     ingredients: new Ingredients
-    imageURL: null
+    imageUrl: null
     servingSize: 2
     isStarred: false
     rating: 0
@@ -22,10 +23,11 @@ Recipe = Backbone.Model.extend
   attributeObject: ->
     return {
       name: @.get('name')
-      imageURL: @.get('imageURL')
+      imageUrl: @.get('imageUrl')
       isStarred: @.get('isStarred')
       rating: @.get('rating')
       description: @.get('description')
+      url: @.get('url')
     }
 
 Recipes = Backbone.Collection.extend
@@ -71,7 +73,7 @@ $ ->
   curry = new Recipe
       id: 1
       name: "Curry"
-      imageURL: "http://d1jrw5jterzxwu.cloudfront.net/sites/default/files/article_media/curry.jpg"
+      imageUrl: "http://d1jrw5jterzxwu.cloudfront.net/sites/default/files/article_media/curry.jpg"
       ingredients: bologneseIngredients
       servingSize: 2
       isStarred: false
@@ -81,7 +83,7 @@ $ ->
   bolognese = new Recipe
       id: 1
       name: "Spaghetti Bolognese"
-      imageURL: "http://upload.wikimedia.org/wikipedia/commons/e/e5/Heston_Blumenthal's_Perfect_Spaghetti_Bolognese.jpg"
+      imageUrl: "http://upload.wikimedia.org/wikipedia/commons/e/e5/Heston_Blumenthal's_Perfect_Spaghetti_Bolognese.jpg"
       ingredients: bologneseIngredients
       servingSize: 2
       isStarred: false
@@ -102,14 +104,22 @@ $ ->
 
   searchBox = $('#search')
   searchResultsBox = $('#searchResults')
+  historyRecipesBox = $('#historyResults')
   errorBox = $('#error')
 
   errorTemplate = $('#errorTemplate').html()
   searchResultTemplate = $('#searchResultTemplate').html()
+  historyRecipeTemplate = $('#historyRecipeTemplate').html()
 
   createRecipeFromJSON = (jsonRecipe) ->
-    # Filler
-    return bolognese
+    new Recipe
+      url: jsonRecipe.url
+      rating: jsonRecipe.rating
+      imageUrl: jsonRecipe.imageUrl
+      isStarred: jsonRecipe.isStarred
+      name: jsonRecipe.name
+      id: 1
+      description: "This description should be changed"
 
   #############################################################################
   ### SEARCH
@@ -130,11 +140,10 @@ $ ->
   searchResultHandler = (jsonResults) ->
     console.log "Returned"
     console.log jsonResults
+
     # Turn JSON recipes into recipe objects
     results = $.parseJSON(jsonResults).results
-    results = [results, results, results]
     recipeResults = (createRecipeFromJSON result for result in results)
-    recipeResults = [bolognese, curry]
 
     # Render the recipes
     renderedResults = (renderRecipe searchResultTemplate, recipeResult for recipeResult in recipeResults)
@@ -145,7 +154,8 @@ $ ->
     $('#searchResults .item:first').addClass 'active'
 
     # show the carousel div and rebind
-    $('#searchResults').parent('.carousel').removeClass('hidden').carousel()
+    carousel = $('#searchResults').parent('.carousel')
+    carousel.removeClass('hidden').carousel() if results.length > 0
 
   #############################################################################
   ### HISTORY
@@ -159,12 +169,13 @@ $ ->
 
   historyHandler = (jsonHistory) ->
     # Parse JSON History into recipe objects
-    history = $.parseJSON jsonHistory.results
-    history = [history]
-    historyRecipes (createRecipeFromJSON result for result in history)
+    # history = $.parseJSON jsonHistory.results
+    # history = [history]
+    # historyRecipes (createRecipeFromJSON result for result in history)
+    historyRecipes = [bolognese, curry]
 
     # Render recipes
-    renderedHistoryRecipes = (renderHistoryRecipe recipe for recipe in historyRecipes)
+    renderedHistoryRecipes = (renderRecipe historyRecipeTemplate, recipe for recipe in historyRecipes)
 
     historyRecipesBox.html('')
     historyRecipesBox.append renderedRecipe for renderedRecipe in renderedHistoryRecipes
@@ -183,3 +194,4 @@ $ ->
     errorBox.html renderedTemplate
 
   searchBox.change throttledSearch
+  loadHistory()

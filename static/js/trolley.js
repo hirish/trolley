@@ -19,8 +19,9 @@
     defaults: {
       id: 0,
       name: null,
+      url: null,
       ingredients: new Ingredients,
-      imageURL: null,
+      imageUrl: null,
       servingSize: 2,
       isStarred: false,
       rating: 0,
@@ -29,10 +30,11 @@
     attributeObject: function() {
       return {
         name: this.get('name'),
-        imageURL: this.get('imageURL'),
+        imageUrl: this.get('imageUrl'),
         isStarred: this.get('isStarred'),
         rating: this.get('rating'),
-        description: this.get('description')
+        description: this.get('description'),
+        url: this.get('url')
       };
     }
   });
@@ -73,7 +75,7 @@
   };
 
   $(function() {
-    var anotherBolognese, bolognese, bologneseIngredients, createRecipeFromJSON, curry, eatlist, errorBox, errorHandler, errorTemplate, finalBolognese, historyHandler, loadHistory, myBolognese, pasta, renderHistoryRecipe, renderRecipe, search, searchBox, searchResultHandler, searchResultTemplate, searchResultsBox, throttledSearch, userId;
+    var anotherBolognese, bolognese, bologneseIngredients, createRecipeFromJSON, curry, eatlist, errorBox, errorHandler, errorTemplate, finalBolognese, historyHandler, historyRecipeTemplate, historyRecipesBox, loadHistory, myBolognese, pasta, renderHistoryRecipe, renderRecipe, search, searchBox, searchResultHandler, searchResultTemplate, searchResultsBox, throttledSearch, userId;
     $('#tab-switch li a').click(switchTab);
     window.userId = userId = 1;
     pasta = new Ingredient({
@@ -86,7 +88,7 @@
     curry = new Recipe({
       id: 1,
       name: "Curry",
-      imageURL: "http://d1jrw5jterzxwu.cloudfront.net/sites/default/files/article_media/curry.jpg",
+      imageUrl: "http://d1jrw5jterzxwu.cloudfront.net/sites/default/files/article_media/curry.jpg",
       ingredients: bologneseIngredients,
       servingSize: 2,
       isStarred: false,
@@ -96,7 +98,7 @@
     bolognese = new Recipe({
       id: 1,
       name: "Spaghetti Bolognese",
-      imageURL: "http://upload.wikimedia.org/wikipedia/commons/e/e5/Heston_Blumenthal's_Perfect_Spaghetti_Bolognese.jpg",
+      imageUrl: "http://upload.wikimedia.org/wikipedia/commons/e/e5/Heston_Blumenthal's_Perfect_Spaghetti_Bolognese.jpg",
       ingredients: bologneseIngredients,
       servingSize: 2,
       isStarred: false,
@@ -118,11 +120,21 @@
     eatlist = [myBolognese, anotherBolognese, finalBolognese];
     searchBox = $('#search');
     searchResultsBox = $('#searchResults');
+    historyRecipesBox = $('#historyResults');
     errorBox = $('#error');
     errorTemplate = $('#errorTemplate').html();
     searchResultTemplate = $('#searchResultTemplate').html();
+    historyRecipeTemplate = $('#historyRecipeTemplate').html();
     createRecipeFromJSON = function(jsonRecipe) {
-      return bolognese;
+      return new Recipe({
+        url: jsonRecipe.url,
+        rating: jsonRecipe.rating,
+        imageUrl: jsonRecipe.imageUrl,
+        isStarred: jsonRecipe.isStarred,
+        name: jsonRecipe.name,
+        id: 1,
+        description: "This description should be changed"
+      });
     };
     /* SEARCH
     */
@@ -140,11 +152,10 @@
       return _.template(template, recipe.attributeObject());
     };
     searchResultHandler = function(jsonResults) {
-      var recipeResult, recipeResults, renderedResult, renderedResults, result, results, _i, _len;
+      var carousel, recipeResult, recipeResults, renderedResult, renderedResults, result, results, _i, _len;
       console.log("Returned");
       console.log(jsonResults);
       results = $.parseJSON(jsonResults).results;
-      results = [results, results, results];
       recipeResults = (function() {
         var _i, _len, _results;
         _results = [];
@@ -154,7 +165,6 @@
         }
         return _results;
       })();
-      recipeResults = [bolognese, curry];
       renderedResults = (function() {
         var _i, _len, _results;
         _results = [];
@@ -170,7 +180,10 @@
         searchResultsBox.append(renderedResult);
       }
       $('#searchResults .item:first').addClass('active');
-      return $('#searchResults').parent('.carousel').removeClass('hidden').carousel();
+      carousel = $('#searchResults').parent('.carousel');
+      if (results.length > 0) {
+        return carousel.removeClass('hidden').carousel();
+      }
     };
     /* HISTORY
     */
@@ -183,24 +196,14 @@
       });
     };
     historyHandler = function(jsonHistory) {
-      var history, recipe, renderedHistoryRecipes, renderedRecipe, result, _i, _len, _results;
-      history = $.parseJSON(jsonHistory.results);
-      history = [history];
-      historyRecipes((function() {
-        var _i, _len, _results;
-        _results = [];
-        for (_i = 0, _len = history.length; _i < _len; _i++) {
-          result = history[_i];
-          _results.push(createRecipeFromJSON(result));
-        }
-        return _results;
-      })());
+      var historyRecipes, recipe, renderedHistoryRecipes, renderedRecipe, _i, _len, _results;
+      historyRecipes = [bolognese, curry];
       renderedHistoryRecipes = (function() {
         var _i, _len, _results;
         _results = [];
         for (_i = 0, _len = historyRecipes.length; _i < _len; _i++) {
           recipe = historyRecipes[_i];
-          _results.push(renderHistoryRecipe(recipe));
+          _results.push(renderRecipe(historyRecipeTemplate, recipe));
         }
         return _results;
       })();
@@ -225,7 +228,8 @@
       });
       return errorBox.html(renderedTemplate);
     };
-    return searchBox.change(throttledSearch);
+    searchBox.change(throttledSearch);
+    return loadHistory();
   });
 
 }).call(this);
