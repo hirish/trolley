@@ -2,6 +2,7 @@
 from flask import Flask, request
 import config
 import json
+from models import Recipe
 from utils import get_recipe
 
 app = config.application
@@ -13,14 +14,9 @@ def index():
 @app.route('/<user>/search')
 def search(user):
     query = request.args.get('q').lower()
-    results = []
-    if query == 'spag bol':
-        results.append(get_recipe(0))
-        results.append(get_recipe(1))
-        results.append(get_recipe(2))
-    elif query == 'fish and chips':
-        results.append(get_recipe(3))
-        results.append(get_recipe(4))
+    results = Recipe.title.match(query)
+    for r in results:
+        print r
     return json.dumps({'results': results})
 
 @app.route('/recipe/<recipe>', methods=['GET','POST'])
