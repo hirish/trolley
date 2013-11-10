@@ -144,7 +144,8 @@ $ ->
     searchResultsBox.append renderedResult for renderedResult in renderedResults
     $('#searchResults .item:first').addClass 'active'
 
-    $('#searchResults').parent().removeClass 'hidden'
+    # show the carousel div and rebind
+    $('#searchResults').parent('.carousel').removeClass('hidden').carousel()
 
   #############################################################################
   ### HISTORY
