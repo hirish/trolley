@@ -45,9 +45,13 @@ hideKeyboard = ->
   $("input").blur()
 
 $('#searchForm').on('change', 'input[name=servings]', ->
-  selected = $.trim($(this).parent('label').text())
+  selected = $.trim($(@).parent('label').text())
   $('button[data-target=#servingSelector]').text(selected)
   $('#servingSelector').collapse('hide')
+)
+
+$('.navbar-collapse').on('click', 'a[data-toggle=tab]', ->
+  $(@).parents('.navbar-collapse').removeClass('in').addClass('collapse')
 )
 
 $('#searchResults').parent('.carousel').swipe(
