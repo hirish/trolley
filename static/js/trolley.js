@@ -2,7 +2,7 @@
 /* MODELS
 */
 
-var EatList, EatListRecipe, Ingredient, Ingredients, Recipe, Recipes, addedToEatListHandler, buyHandler, cancelHandler, createIngredientFromJSON, createRecipeFromJSON, getIngredientsForRecipe, hideKeyboard, initEatListFromServer, initEatListHandler, recipeClickHandler, submitHandler;
+var EatList, EatListRecipe, Ingredient, Ingredients, Recipe, Recipes, addedToEatListHandler, buyHandler, cancelHandler, createIngredientFromJSON, createRecipeFromJSON, flash, getIngredientsForRecipe, hideKeyboard, initEatListFromServer, initEatListHandler, recipeClickHandler, submitHandler;
 
 Ingredient = Backbone.Model.extend({
   defaults: {
@@ -60,8 +60,12 @@ Recipe = Backbone.Model.extend({
       url: this.get('url')
     };
   },
-  addToShoppingList: function() {
+  addToShoppingList: function(addToServer) {
     var eatListRecipe;
+    if (addToServer === true) {
+      console.log("Firing at " + '/1/eatlist/' + this.get('id'));
+      $.ajax('/1/eatlist/' + this.get('id'));
+    }
     eatListRecipe = new EatListRecipe({
       baseRecipe: this,
       ingredients: this.get('ingredients'),
@@ -97,28 +101,6 @@ hideKeyboard = function() {
   return $("input").blur();
 };
 
-$('#searchForm').on('change', 'input[name=servings]', function() {
-  var selected;
-  selected = $.trim($(this).parent('label').text());
-  $('button[data-target=#servingSelector]').text(selected);
-  return $('#servingSelector').collapse('hide');
-});
-
-$('.navbar-collapse').on('click', 'a[data-toggle=tab]', function() {
-  return $(this).parents('.navbar-collapse').removeClass('in').addClass('collapse');
-});
-
-$('#searchResults').parent('.carousel').swipe({
-  swipe: function(event, direction, distance, duration, fingerCount) {
-    switch (direction) {
-      case 'left':
-        return $(this).carousel('next');
-      case 'right':
-        return $(this).carousel('prev');
-    }
-  }
-});
-
 /* UTILITY FUNCTIONS
 */
 
@@ -138,7 +120,7 @@ createRecipeFromJSON = function(jsonRecipe) {
     isStarred: jsonRecipe.isStarred,
     name: jsonRecipe.name,
     id: jsonRecipe.id,
-    description: "This description should be changed"
+    description: jsonRecipe.description
   });
   recipes.add(newRecipe);
   return newRecipe;
@@ -169,8 +151,7 @@ getIngredientsForRecipe = function(recipe) {
 
 initEatListFromServer = function() {
   return $.ajax('/1/eatlist', {
-    success: initEatListHandler,
-    error: errorHandler
+    success: initEatListHandler
   });
 };
 
@@ -178,9 +159,11 @@ initEatListFromServer = function() {
 */
 
 
-recipeClickHandler = function(e) {
-  var id, recipe;
-  id = parseInt($(this).attr('recipe-id'));
+recipeClickHandler = function(e, t) {
+  var id, item, recipe;
+  item = $(this).is('.carousel') ? $('.active', this) : $(this);
+  flash(item);
+  id = parseInt(item.attr('recipe-id'));
   recipe = recipes.find(function(recipe) {
     return recipe.get('id') === id;
   });
@@ -188,7 +171,7 @@ recipeClickHandler = function(e) {
     console.log("Clicked on a recipe with an unloaded id (i.e. id could not be found in window.recipes)");
     return;
   }
-  return recipe.addToShoppingList();
+  return recipe.addToShoppingList(true);
 };
 
 addedToEatListHandler = function(eatListRecipe) {
@@ -265,7 +248,8 @@ submitHandler = function(e) {
 
 initEatListHandler = function(jsonEatList) {
   var eatList, eatListRecipes, recipe, result, _i, _len, _results;
-  eatList = $.parseJSON(jsonEatList).results;
+  console.log(jsonEatList);
+  eatList = $.parseJSON(jsonEatList).eatlist;
   eatListRecipes = (function() {
     var _i, _len, _results;
     _results = [];
@@ -278,9 +262,45 @@ initEatListHandler = function(jsonEatList) {
   _results = [];
   for (_i = 0, _len = eatListRecipes.length; _i < _len; _i++) {
     recipe = eatListRecipes[_i];
-    _results.push(recipe.addToShoppingList());
+    _results.push(recipe.addToShoppingList(false));
   }
   return _results;
+};
+
+/* MISC LISTENERS
+*/
+
+
+$('#searchForm').on('change', 'input[name=servings]', function() {
+  var selected;
+  selected = $.trim($(this).parent('label').text());
+  $('button[data-target=#servingSelector]').text(selected);
+  return $('#servingSelector').collapse('hide');
+});
+
+$('.navbar-collapse').on('click', 'a[data-toggle=tab]', function() {
+  return $(this).parents('.navbar-collapse').removeClass('in').addClass('collapse');
+});
+
+$('#searchResults').parent('.carousel').swipe({
+  swipe: function(event, direction, distance, duration, fingerCount) {
+    switch (direction) {
+      case 'left':
+        return $(this).carousel('next');
+      case 'right':
+        return $(this).carousel('prev');
+    }
+  },
+  tap: recipeClickHandler
+});
+
+flash = function(element) {
+  var x;
+  element.addClass('flash');
+  x = function() {
+    return element.removeClass('flash');
+  };
+  return setTimeout(x, 200);
 };
 
 /* ON LOAD
@@ -344,7 +364,6 @@ $(function() {
       searchResultsBox.append(renderedResult);
     }
     $('#searchResults .item:first').addClass('active');
-    searchResultsBox.children().click(recipeClickHandler);
     carousel = $('#searchResults').parent('.carousel');
     if (results.length > 0) {
       return carousel.removeClass('hidden').carousel();
@@ -411,6 +430,7 @@ $(function() {
       }
       return _results;
     })();
+    window.s = starredRecipes;
     renderedStarredRecipes = (function() {
       var _i, _len, _results;
       _results = [];
