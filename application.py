@@ -1,13 +1,11 @@
 #!/usr/bin/env python
 from flask import Flask, request
-import flask.ext.whooshalchemy as whooshalchemy
 import config
 import json
 from models import Recipe
 from utils import get_recipe
 
 app = config.application
-whooshalchemy.whoosh_index(app, Recipe)
 
 @app.route('/')
 def index():
@@ -16,7 +14,7 @@ def index():
 @app.route('/<user>/search')
 def search(user):
     query = request.args.get('q').lower()
-    results = Recipe.query.whoosh_search(query).all()
+    results = []
     print results
     results = [ {r.id: r.title} for r in results ]
     return json.dumps({'results': results})
