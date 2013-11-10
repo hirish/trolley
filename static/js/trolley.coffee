@@ -119,6 +119,11 @@ getIngredientsForRecipe = (recipe) ->
   data = $.parseJSON(response.responseText).results
   (createIngredientFromJSON ingredientJSON for ingredientJSON in data)
 
+initEatListFromServer = ->
+  $.ajax '/1/eatlist',
+    success: initEatListHandler
+    error: errorHandler
+
 #############################################################################
 ### CLICK HANDLERS
 #############################################################################
@@ -168,6 +173,40 @@ cancelHandler = (e) ->
    console.log('test')
    $('.hideBg').hide()
   setTimeout(x, 350)
+
+submitHandler = (e) ->
+  $('#submitIcon').removeClass('glyphicon-cutlery')
+  $('#submitIcon').addClass('glyphicon-upload')
+
+  done = ->
+    $('#submitIcon').removeClass('glyphicon-upload')
+    $('#submitIcon').addClass('glyphicon-ok')
+
+    $('#submitIcon').parent().removeClass('btn-primary')
+    $('#submitIcon').parent().addClass('btn-success')
+
+  reset = ->
+    eatList = new EatList
+    eatListBox = $('#eatList')
+    eatListBox.html('')
+
+    cancelHandler()
+
+    $('#submitIcon').removeClass('glyphicon-ok')
+    $('#submitIcon').addClass('glyphicon-upload')
+
+    $('#submitIcon').parent().removeClass('btn-success')
+    $('#submitIcon').parent().addClass('btn-primary')
+
+  setTimeout(done, 500)
+  setTimeout(reset, 1000)
+
+initEatListHandler = (jsonEatList) ->
+  eatList = $.parseJSON(jsonEatList).results
+  eatListRecipes = (createRecipeFromJSON result for result in eatList)
+
+  recipe.addToShoppingList() for recipe in eatListRecipes
+
 
 #############################################################################
 ### ON LOAD
@@ -281,3 +320,4 @@ $ ->
   loadStarred()
   $('#buy').click buyHandler
   $('#cancel').click cancelHandler
+  $('#submit').click submitHandler
