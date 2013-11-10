@@ -169,6 +169,33 @@ cancelHandler = (e) ->
    $('.hideBg').hide()
   setTimeout(x, 350)
 
+submitHandler = (e) ->
+  $('#submitIcon').removeClass('glyphicon-cutlery')
+  $('#submitIcon').addClass('glyphicon-upload')
+
+  done = ->
+    $('#submitIcon').removeClass('glyphicon-upload')
+    $('#submitIcon').addClass('glyphicon-ok')
+
+    $('#submitIcon').parent().removeClass('btn-primary')
+    $('#submitIcon').parent().addClass('btn-success')
+
+  reset = ->
+    eatList = new EatList
+    eatListBox = $('#eatList')
+    eatListBox.html('')
+
+    cancelHandler()
+    
+    $('#submitIcon').removeClass('glyphicon-ok')
+    $('#submitIcon').addClass('glyphicon-upload')
+
+    $('#submitIcon').parent().removeClass('btn-success')
+    $('#submitIcon').parent().addClass('btn-primary')
+
+  setTimeout(done, 500)
+  setTimeout(reset, 1000)
+
 #############################################################################
 ### ON LOAD
 #############################################################################
@@ -281,3 +308,4 @@ $ ->
   loadStarred()
   $('#buy').click buyHandler
   $('#cancel').click cancelHandler
+  $('#submit').click submitHandler
