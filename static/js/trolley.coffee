@@ -68,6 +68,16 @@ $ ->
     isVolume: false
   bologneseIngredients = new Ingredients [pasta]
 
+  curry = new Recipe
+      id: 1
+      name: "Curry"
+      imageURL: "http://d1jrw5jterzxwu.cloudfront.net/sites/default/files/article_media/curry.jpg"
+      ingredients: bologneseIngredients
+      servingSize: 2
+      isStarred: false
+      rating: 5
+      description: "I really like curry."
+
   bolognese = new Recipe
       id: 1
       name: "Spaghetti Bolognese"
@@ -123,10 +133,13 @@ $ ->
       description: result.get('description')
 
   searchResultHandler = (jsonResults) ->
+    console.log "Returned"
+    console.log jsonResults
     # Turn JSON recipes into recipe objects
     results = $.parseJSON(jsonResults).results
     results = [results, results, results]
     recipeResults = (createRecipeFromJSON result for result in results)
+    recipeResults = [bolognese, curry]
 
     # Render the recipes
     renderedResults = (renderSearchResult recipeResult for recipeResult in recipeResults)

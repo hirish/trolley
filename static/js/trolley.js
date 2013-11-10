@@ -71,7 +71,7 @@ switchTab = function(e) {
 };
 
 $(function() {
-  var anotherBolognese, bolognese, bologneseIngredients, createRecipeFromJSON, eatlist, errorBox, errorHandler, errorTemplate, finalBolognese, historyHandler, loadHistory, myBolognese, pasta, renderHistoryRecipe, renderSearchResult, search, searchBox, searchResultHandler, searchResultTemplate, searchResultsBox, throttledSearch, userId;
+  var anotherBolognese, bolognese, bologneseIngredients, createRecipeFromJSON, curry, eatlist, errorBox, errorHandler, errorTemplate, finalBolognese, historyHandler, loadHistory, myBolognese, pasta, renderHistoryRecipe, renderSearchResult, search, searchBox, searchResultHandler, searchResultTemplate, searchResultsBox, throttledSearch, userId;
   $('#tab-switch li a').click(switchTab);
   window.userId = userId = 1;
   pasta = new Ingredient({
@@ -81,6 +81,16 @@ $(function() {
     isVolume: false
   });
   bologneseIngredients = new Ingredients([pasta]);
+  curry = new Recipe({
+    id: 1,
+    name: "Curry",
+    imageURL: "http://d1jrw5jterzxwu.cloudfront.net/sites/default/files/article_media/curry.jpg",
+    ingredients: bologneseIngredients,
+    servingSize: 2,
+    isStarred: false,
+    rating: 5,
+    description: "I really like curry."
+  });
   bolognese = new Recipe({
     id: 1,
     name: "Spaghetti Bolognese",
@@ -135,6 +145,8 @@ $(function() {
   };
   searchResultHandler = function(jsonResults) {
     var recipeResult, recipeResults, renderedResult, renderedResults, result, results, _i, _len;
+    console.log("Returned");
+    console.log(jsonResults);
     results = $.parseJSON(jsonResults).results;
     results = [results, results, results];
     recipeResults = (function() {
@@ -146,6 +158,7 @@ $(function() {
       }
       return _results;
     })();
+    recipeResults = [bolognese, curry];
     renderedResults = (function() {
       var _i, _len, _results;
       _results = [];
