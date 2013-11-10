@@ -12,8 +12,9 @@ Recipe = Backbone.Model.extend
   defaults:
     id: 0
     name: null
+    url: null
     ingredients: new Ingredients
-    imageURL: null
+    imageUrl: null
     servingSize: 2
     isStarred: false
     rating: 0
@@ -22,10 +23,11 @@ Recipe = Backbone.Model.extend
   attributeObject: ->
     return {
       name: @.get('name')
-      imageURL: @.get('imageURL')
+      imageUrl: @.get('imageUrl')
       isStarred: @.get('isStarred')
       rating: @.get('rating')
       description: @.get('description')
+      url: @.get('url')
     }
 
 Recipes = Backbone.Collection.extend
@@ -71,7 +73,7 @@ $ ->
   curry = new Recipe
       id: 1
       name: "Curry"
-      imageURL: "http://d1jrw5jterzxwu.cloudfront.net/sites/default/files/article_media/curry.jpg"
+      imageUrl: "http://d1jrw5jterzxwu.cloudfront.net/sites/default/files/article_media/curry.jpg"
       ingredients: bologneseIngredients
       servingSize: 2
       isStarred: false
@@ -81,7 +83,7 @@ $ ->
   bolognese = new Recipe
       id: 1
       name: "Spaghetti Bolognese"
-      imageURL: "http://upload.wikimedia.org/wikipedia/commons/e/e5/Heston_Blumenthal's_Perfect_Spaghetti_Bolognese.jpg"
+      imageUrl: "http://upload.wikimedia.org/wikipedia/commons/e/e5/Heston_Blumenthal's_Perfect_Spaghetti_Bolognese.jpg"
       ingredients: bologneseIngredients
       servingSize: 2
       isStarred: false
