@@ -2,7 +2,7 @@
 /* MODELS
 */
 
-var EatList, EatListRecipe, Ingredient, Ingredients, Recipe, Recipes, addedToEatListHandler, buyHandler, cancelHandler, createIngredientFromJSON, createRecipeFromJSON, getIngredientsForRecipe, hideKeyboard, initEatListFromServer, initEatListHandler, recipeClickHandler, submitHandler;
+var EatList, EatListRecipe, Ingredient, Ingredients, Recipe, Recipes, addedToEatListHandler, buyHandler, cancelHandler, createIngredientFromJSON, createRecipeFromJSON, flash, getIngredientsForRecipe, hideKeyboard, initEatListFromServer, initEatListHandler, recipeClickHandler, submitHandler;
 
 Ingredient = Backbone.Model.extend({
   defaults: {
@@ -159,6 +159,7 @@ initEatListFromServer = function() {
 recipeClickHandler = function(e, t) {
   var id, item, recipe;
   item = $(this).is('.carousel') ? $('.active', this) : $(this);
+  flash(item);
   id = parseInt(item.attr('recipe-id'));
   recipe = recipes.find(function(recipe) {
     return recipe.get('id') === id;
@@ -288,6 +289,15 @@ $('#searchResults').parent('.carousel').swipe({
   },
   tap: recipeClickHandler
 });
+
+flash = function(element) {
+  var x;
+  element.addClass('flash');
+  x = function() {
+    return element.removeClass('flash');
+  };
+  return setTimeout(x, 200);
+};
 
 /* ON LOAD
 */

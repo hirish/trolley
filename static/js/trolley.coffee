@@ -113,6 +113,7 @@ initEatListFromServer = ->
 
 recipeClickHandler = (e, t) ->
   item = if $(@).is('.carousel') then $('.active', @) else $(@)
+  flash(item)
   id = parseInt item.attr('recipe-id')
   recipe = recipes.find (recipe) ->
     recipe.get('id') == id
@@ -212,6 +213,11 @@ $('#searchResults').parent('.carousel').swipe(
       when 'right' then $(this).carousel('prev')
   tap: recipeClickHandler
 )
+
+flash = (element) ->
+  element.addClass('flash')
+  x = -> element.removeClass('flash')
+  setTimeout(x, 200)
 
 #############################################################################
 ### ON LOAD
