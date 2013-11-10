@@ -2,8 +2,8 @@ Ingredient = Backbone.Model.extend
   defaults:
     id: 0
     name: null
-    amount: 0
-    isVolume: false
+    quantity: 0
+    type: "weight"
 
 Ingredients = Backbone.Collection.extend
   model: Ingredient
@@ -84,6 +84,18 @@ $ ->
       name: jsonRecipe.name
       id: 1
       description: "This description should be changed"
+
+  createIngredientFromJSON = (jsonIngredient) ->
+    new Ingredient
+      name: jsonIngredient.name
+      type: jsonIngredient.type
+      quantity: jsonIngredient.quantity
+
+  getIngredientsForRecipe = (recipe) ->
+    response = $.ajax "/recipe/#{recipe.get('id')}/ingredients", async: false
+    console.log response.responseText
+    data = $.parseJSON(response.responseText).results
+    (createIngredientFromJSON ingredientJSON for ingredientJSON in data)
 
   #############################################################################
   ### SEARCH
