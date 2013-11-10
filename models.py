@@ -11,7 +11,7 @@ class User(db.Model):
         self.name = name
 
     def __repr__(self):
-        return '<User {} - {}>'.format(str(self.id), self.name)
+        return '<User - {}>'.format(self.name)
 
 class Recipe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -25,7 +25,10 @@ class Recipe(db.Model):
     ingredients = db.relationship('Ingredient',
                                     backref='recipe',
                                     foreign_keys='Ingredient.recipe_id')
-    star = db.Column(db.Boolean,default=False)
+    rating = db.Column(db.Boolean,default=False)
+    eatlist = db.relationship('Eatlist',
+                                backref='recipe',
+                                foreign_keys='Eatlist.recipe_id')
 
     def __init__(self, title, url, image):
         self.title = title
@@ -33,7 +36,7 @@ class Recipe(db.Model):
         self.image = image
 
     def __repr__(self):
-        return '<Recipe {} - {}>'.format(str(self.id), self.title)
+        return '<Recipe - {}>'.format(self.title)
 
 class Ingredient(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -48,7 +51,7 @@ class Ingredient(db.Model):
         self.name = name
 
     def __repr__(self):
-        return '<Ingredient {} - {}>'.format(str(self.id), self.name)
+        return '<Ingredient - {}>'.format(self.name)
 
 class Eatlist(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -62,4 +65,4 @@ class Eatlist(db.Model):
         self.recipe = recipe
 
     def __repr__(self):
-        return '<Eatlist {} - ({},{})>'.format(str(self.id), str(self.user.id), str(self.recipe.id))
+        return '<Eatlist - ({},{})>'.format(str(self.user.id), str(self.recipe.id))
