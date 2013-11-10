@@ -16,7 +16,10 @@ def index():
 @app.route('/<user>/search')
 def search(user):
     query = request.args.get('q').lower()
-    results = Recipe.query.whoosh_search(query).all()
+    results = Recipe.query
+    for word in query.split():
+      results = results.filter(Recipe.title.like("%%%s%%" % word))
+    results = results.all()
     print results
     results = [ {r.id: r.title} for r in results ]
     return json.dumps({'results': results})
