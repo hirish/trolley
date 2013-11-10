@@ -33,6 +33,12 @@ def recipe(recipe):
     recipe = get_recipe(recipe) 
     return json.dumps(recipe)
 
+@app.route('/recipe/<recipe>/ingredients', methods=['GET'])
+def ingredients(recipe):
+    # recipe = get_recipe(recipe) 
+    # return json.dumps(recipe)
+    return '{"results":[{"name":"Spaghetti","type":"weight","quantity":5},{"name":"Tomatoes","type":"volume","quantity":300},{"name":"Beef","type":"weight","quantity":600},{"name":"Basil","type":"count","quantity":1}]}'
+
 @app.route('/<user>/history')
 def history(user):
     limit = request.args.get('limit')
