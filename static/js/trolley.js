@@ -2,7 +2,7 @@
 /* MODELS
 */
 
-var EatList, EatListRecipe, Ingredient, Ingredients, Recipe, Recipes, addedToEatListHandler, buyHandler, cancelHandler, createIngredientFromJSON, createRecipeFromJSON, getIngredientsForRecipe, hideKeyboard, initEatListFromServer, initEatListHandler, recipeClickHandler, submitHandler;
+var EatList, EatListRecipe, Ingredient, Ingredients, Recipe, Recipes, addedToEatListHandler, buyHandler, cancelHandler, createIngredientFromJSON, createRecipeFromJSON, flash, getIngredientsForRecipe, hideKeyboard, initEatListFromServer, initEatListHandler, recipeClickHandler, submitHandler;
 
 Ingredient = Backbone.Model.extend({
   defaults: {
@@ -281,6 +281,15 @@ initEatListHandler = function(jsonEatList) {
     _results.push(recipe.addToShoppingList());
   }
   return _results;
+};
+
+flash = function(element) {
+  var x;
+  element.addClass('flash');
+  x = function() {
+    return element.removeClass('flash');
+  };
+  return setTimeout(x, 200);
 };
 
 /* ON LOAD

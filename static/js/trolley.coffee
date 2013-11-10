@@ -207,6 +207,11 @@ initEatListHandler = (jsonEatList) ->
 
   recipe.addToShoppingList() for recipe in eatListRecipes
 
+flash = (element) ->
+  element.addClass('flash')
+  x = -> element.removeClass('flash')
+  setTimeout(x, 200)
+
 
 #############################################################################
 ### ON LOAD

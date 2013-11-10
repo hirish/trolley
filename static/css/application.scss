@@ -188,3 +188,8 @@ h1, h2, h3, h4, h5, h6, legend {
     border: 0;
   }
 }
+
+.flash {
+  transition: 0.3s;
+  background-color: #ffc !important;
+}
