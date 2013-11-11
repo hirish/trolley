@@ -23,10 +23,13 @@ Recipe = Backbone.Model.extend
     isStarred: false
     rating: 0
     description: "This is a description"
+    autoRender: false
 
   initialize: ->
     $.ajax "/recipe/#{@.get('id')}/ingredients",
       success: (response) =>
+        if @.get('autoRender')
+          console.log @
         data = $.parseJSON(response).results
         ingredients = (createIngredientFromJSON ingredientJSON for ingredientJSON in data)
         @.set('ingredients', ingredients)
@@ -78,10 +81,13 @@ hideKeyboard = ->
 ### UTILITY FUNCTIONS
 #############################################################################
 
-createRecipeFromJSON = (jsonRecipe) ->
+createRecipeFromJSON = (jsonRecipe, autoRender) ->
   recipe = recipes.find (recipe) ->
     recipe.get('id') == jsonRecipe.id
   return recipe if recipe?
+
+  if not autoRender?
+    autoRender = false
 
   newRecipe = new Recipe
     url: jsonRecipe.url
@@ -91,6 +97,7 @@ createRecipeFromJSON = (jsonRecipe) ->
     name: jsonRecipe.name
     id: jsonRecipe.id
     description: jsonRecipe.description
+    autoRender: autoRender
   recipes.add newRecipe
   return newRecipe
 
@@ -204,12 +211,13 @@ submitHandler = (e) ->
   setTimeout(done, 500)
   setTimeout(reset, 1000)
 
+toRender = []
 initEatListHandler = (jsonEatList) ->
   console.log jsonEatList
   eatList = $.parseJSON(jsonEatList).eatlist
-  eatListRecipes = (createRecipeFromJSON result for result in eatList)
+  eatListRecipes = (createRecipeFromJSON(result, true) for result in eatList)
+  toRender = eatListRecipes
 
-  recipe.addToShoppingList(false) for recipe in eatListRecipes
 
 #############################################################################
 ### MISC LISTENERS
@@ -354,3 +362,9 @@ $ ->
   $('#buy').click buyHandler
   $('#cancel').click cancelHandler
   $('#submit').click submitHandler
+  initEatListFromServer()
+
+  x = ->
+    recipe.addToShoppingList(false) for recipe in toRender
+  setTimeout(x, 3000)
+
