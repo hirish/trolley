@@ -2,7 +2,7 @@
 /* MODELS
 */
 
-var EatList, EatListRecipe, Ingredient, Ingredients, Recipe, Recipes, addedToEatListHandler, buyHandler, cancelHandler, createIngredientFromJSON, createRecipeFromJSON, flash, getIngredientsForRecipe, hideKeyboard, ingredientTypeToUnit, initEatListFromServer, initEatListHandler, recipeClickHandler, submitHandler;
+var EatList, EatListRecipe, Ingredient, Ingredients, Recipe, Recipes, addedToEatListHandler, buyHandler, cancelHandler, createIngredientFromJSON, createRecipeFromJSON, flash, getIngredientsForRecipe, hideKeyboard, ingredientTypeToUnit, initEatListFromServer, initEatListHandler, recipeClickHandler, submitHandler, toRender;
 
 Ingredient = Backbone.Model.extend({
   defaults: {
@@ -27,13 +27,17 @@ Recipe = Backbone.Model.extend({
     servingSize: 2,
     isStarred: false,
     rating: 0,
-    description: "This is a description"
+    description: "This is a description",
+    autoRender: false
   },
   initialize: function() {
     var _this = this;
     return $.ajax("/recipe/" + (this.get('id')) + "/ingredients", {
       success: function(response) {
         var data, ingredientJSON, ingredients;
+        if (_this.get('autoRender')) {
+          console.log(_this);
+        }
         data = $.parseJSON(response).results;
         ingredients = (function() {
           var _i, _len, _results;
@@ -105,13 +109,16 @@ hideKeyboard = function() {
 */
 
 
-createRecipeFromJSON = function(jsonRecipe) {
+createRecipeFromJSON = function(jsonRecipe, autoRender) {
   var newRecipe, recipe;
   recipe = recipes.find(function(recipe) {
     return recipe.get('id') === jsonRecipe.id;
   });
   if (recipe != null) {
     return recipe;
+  }
+  if (autoRender == null) {
+    autoRender = false;
   }
   newRecipe = new Recipe({
     url: jsonRecipe.url,
@@ -120,7 +127,8 @@ createRecipeFromJSON = function(jsonRecipe) {
     isStarred: jsonRecipe.isStarred,
     name: jsonRecipe.name,
     id: jsonRecipe.id,
-    description: jsonRecipe.description
+    description: jsonRecipe.description,
+    autoRender: autoRender
   });
   recipes.add(newRecipe);
   return newRecipe;
@@ -260,8 +268,10 @@ submitHandler = function(e) {
   return setTimeout(reset, 1000);
 };
 
+toRender = [];
+
 initEatListHandler = function(jsonEatList) {
-  var eatList, eatListRecipes, recipe, result, _i, _len, _results;
+  var eatList, eatListRecipes, result;
   console.log(jsonEatList);
   eatList = $.parseJSON(jsonEatList).eatlist;
   eatListRecipes = (function() {
@@ -269,16 +279,11 @@ initEatListHandler = function(jsonEatList) {
     _results = [];
     for (_i = 0, _len = eatList.length; _i < _len; _i++) {
       result = eatList[_i];
-      _results.push(createRecipeFromJSON(result));
+      _results.push(createRecipeFromJSON(result, true));
     }
     return _results;
   })();
-  _results = [];
-  for (_i = 0, _len = eatListRecipes.length; _i < _len; _i++) {
-    recipe = eatListRecipes[_i];
-    _results.push(recipe.addToShoppingList(false));
-  }
-  return _results;
+  return toRender = eatListRecipes;
 };
 
 /* MISC LISTENERS
@@ -322,7 +327,7 @@ flash = function(element) {
 
 
 $(function() {
-  var eatList, errorBox, errorHandler, errorTemplate, historyHandler, historyRecipeTemplate, historyRecipesBox, loadHistory, loadStarred, recipes, renderRecipe, search, searchBox, searchResultHandler, searchResultTemplate, searchResultsBox, starredHandler, starredRecipeTemplate, starredRecipesBox, throttledSearch, userId;
+  var eatList, errorBox, errorHandler, errorTemplate, historyHandler, historyRecipeTemplate, historyRecipesBox, loadHistory, loadStarred, recipes, renderRecipe, search, searchBox, searchResultHandler, searchResultTemplate, searchResultsBox, starredHandler, starredRecipeTemplate, starredRecipesBox, throttledSearch, userId, x;
   window.userId = userId = 1;
   window.recipes = recipes = new Recipes;
   window.eatList = eatList = new EatList;
@@ -476,5 +481,16 @@ $(function() {
   loadStarred();
   $('#buy').click(buyHandler);
   $('#cancel').click(cancelHandler);
-  return $('#submit').click(submitHandler);
+  $('#submit').click(submitHandler);
+  initEatListFromServer();
+  x = function() {
+    var recipe, _i, _len, _results;
+    _results = [];
+    for (_i = 0, _len = toRender.length; _i < _len; _i++) {
+      recipe = toRender[_i];
+      _results.push(recipe.addToShoppingList(false));
+    }
+    return _results;
+  };
+  return setTimeout(x, 3000);
 });
